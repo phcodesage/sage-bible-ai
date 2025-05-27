@@ -19,7 +19,7 @@ import SearchResultItem from '@/components/Search/SearchResultItem';
 import SearchHistory from '@/components/Search/SearchHistory';
 import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 
-function SearchScreen() {
+export default function SearchScreen() {
   const [query, setQuery] = useState('');
   const [activeSearch, setActiveSearch] = useState(false);
   const colorScheme = useColorScheme();
@@ -219,5 +219,3 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 });
-
-export default SearchScreen;
