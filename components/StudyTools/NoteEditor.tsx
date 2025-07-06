@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { X, Save } from 'lucide-react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 
 interface NoteEditorProps {
@@ -34,7 +34,7 @@ export default function NoteEditor({
   isEditing = false,
 }: NoteEditorProps) {
   const [content, setContent] = useState(initialContent);
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (isVisible) {
@@ -62,17 +62,17 @@ export default function NoteEditor({
       >
         <View style={[
           styles.container,
-          { backgroundColor: Colors[colorScheme ?? 'light'].background }
+          { backgroundColor: Colors[theme].background }
         ]}>
           <View style={styles.header}>
             <Text style={[
               styles.headerTitle,
-              { color: Colors[colorScheme ?? 'light'].text }
+              { color: Colors[theme].text }
             ]}>
               {isEditing ? 'Edit Note' : 'Add Note'}
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <X size={24} color={Colors[colorScheme ?? 'light'].text} />
+              <X size={24} color={Colors[theme].text} />
             </TouchableOpacity>
           </View>
 
@@ -80,13 +80,13 @@ export default function NoteEditor({
             <View style={styles.verseContainer}>
               <Text style={[
                 styles.verseId,
-                { color: Colors[colorScheme ?? 'light'].tint }
+                { color: Colors[theme].tint }
               ]}>
                 {verseId}
               </Text>
               <Text style={[
                 styles.verseText,
-                { color: Colors[colorScheme ?? 'light'].text }
+                { color: Colors[theme].text }
               ]}>
                 {verseText}
               </Text>
@@ -96,12 +96,12 @@ export default function NoteEditor({
               style={[
                 styles.noteInput,
                 { 
-                  color: Colors[colorScheme ?? 'light'].text,
-                  backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
+                  color: Colors[theme].text,
+                  backgroundColor: Colors[theme].cardBackground,
                 }
               ]}
               placeholder="Write your note here..."
-              placeholderTextColor={Colors[colorScheme ?? 'light'].textSecondary}
+              placeholderTextColor={Colors[theme].textSecondary}
               value={content}
               onChangeText={setContent}
               multiline
@@ -114,7 +114,7 @@ export default function NoteEditor({
             <TouchableOpacity
               style={[
                 styles.saveButton,
-                { backgroundColor: Colors[colorScheme ?? 'light'].tint },
+                { backgroundColor: Colors[theme].tint },
                 !content.trim() && styles.disabledButton
               ]}
               onPress={handleSave}

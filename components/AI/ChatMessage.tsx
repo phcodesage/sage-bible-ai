@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import Animated, { FadeInRight, FadeInLeft } from 'react-native-reanimated';
 
@@ -15,7 +15,7 @@ interface ChatMessageProps {
 }
 
 export default function ChatMessage({ message, isUser }: ChatMessageProps) {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   
   // Function to parse verse references in AI responses
   const parseVerseReferences = (text: string) => {
@@ -75,7 +75,7 @@ export default function ChatMessage({ message, isUser }: ChatMessageProps) {
             return (
               <Text 
                 key={index} 
-                style={[styles.verseReference, { color: Colors[colorScheme ?? 'light'].tint }]}
+                style={[styles.verseReference, { color: Colors[theme].tint }]}
               >
                 {part.content}
               </Text>
@@ -99,12 +99,12 @@ export default function ChatMessage({ message, isUser }: ChatMessageProps) {
       <View style={[
         styles.messageBubble,
         isUser 
-          ? [styles.userBubble, { backgroundColor: Colors[colorScheme ?? 'light'].tint }] 
-          : [styles.aiBubble, { backgroundColor: Colors[colorScheme ?? 'light'].card }]
+          ? [styles.userBubble, { backgroundColor: Colors[theme].tint }] 
+          : [styles.aiBubble, { backgroundColor: Colors[theme].card }]
       ]}>
         <Text style={[
           styles.messageText,
-          { color: isUser ? '#fff' : Colors[colorScheme ?? 'light'].text }
+          { color: isUser ? '#fff' : Colors[theme].text }
         ]}>
           {renderMessageContent()}
         </Text>

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
@@ -11,7 +11,7 @@ interface EmptyStateProps {
 }
 
 export default function EmptyState({ icon, title, message }: EmptyStateProps) {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   
   return (
     <Animated.View 
@@ -22,11 +22,11 @@ export default function EmptyState({ icon, title, message }: EmptyStateProps) {
         {icon}
       </View>
       
-      <Text style={[styles.title, { color: Colors[colorScheme ?? 'light'].text }]}>
+      <Text style={[styles.title, { color: Colors[theme].text }]}>
         {title}
       </Text>
       
-      <Text style={[styles.message, { color: Colors[colorScheme ?? 'light'].textSecondary }]}>
+      <Text style={[styles.message, { color: Colors[theme].textSecondary }]}>
         {message}
       </Text>
     </Animated.View>

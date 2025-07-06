@@ -7,7 +7,7 @@ import {
   Switch, 
   Modal
 } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { ChevronRight, X } from 'lucide-react-native';
 
@@ -42,7 +42,7 @@ export default function SettingsItem({
   chevron = false,
 }: SettingsItemProps) {
   const [modalVisible, setModalVisible] = useState(false);
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   
   const handlePress = () => {
     if (type === 'select') {
@@ -64,7 +64,7 @@ export default function SettingsItem({
       <TouchableOpacity 
         style={[
           styles.container,
-          { borderBottomColor: Colors[colorScheme ?? 'light'].border }
+          { borderBottomColor: Colors[theme].border }
         ]}
         onPress={handlePress}
         disabled={type === 'switch'}
@@ -74,12 +74,12 @@ export default function SettingsItem({
         </View>
         
         <View style={styles.contentContainer}>
-          <Text style={[styles.title, { color: Colors[colorScheme ?? 'light'].text }]}>
+          <Text style={[styles.title, { color: Colors[theme].text }]}>
             {title}
           </Text>
           
           {description && (
-            <Text style={[styles.description, { color: Colors[colorScheme ?? 'light'].textSecondary }]}>
+            <Text style={[styles.description, { color: Colors[theme].textSecondary }]}>
               {description}
             </Text>
           )}
@@ -91,15 +91,15 @@ export default function SettingsItem({
               value={value as boolean}
               onValueChange={onValueChange}
               trackColor={{ 
-                false: Colors[colorScheme ?? 'light'].switchTrack, 
-                true: Colors[colorScheme ?? 'light'].tint 
+                false: Colors[theme].switchTrack, 
+                true: Colors[theme].tint 
               }}
               thumbColor="#fff"
             />
           )}
           
           {(type === 'select' || chevron) && (
-            <ChevronRight size={18} color={Colors[colorScheme ?? 'light'].textSecondary} />
+            <ChevronRight size={18} color={Colors[theme].textSecondary} />
           )}
         </View>
       </TouchableOpacity>
@@ -113,14 +113,14 @@ export default function SettingsItem({
         <View style={styles.modalOverlay}>
           <View style={[
             styles.modalContainer,
-            { backgroundColor: Colors[colorScheme ?? 'light'].background }
+            { backgroundColor: Colors[theme].background }
           ]}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+              <Text style={[styles.modalTitle, { color: Colors[theme].text }]}>
                 Select {title}
               </Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <X size={24} color={Colors[colorScheme ?? 'light'].text} />
+                <X size={24} color={Colors[theme].text} />
               </TouchableOpacity>
             </View>
             
@@ -130,18 +130,18 @@ export default function SettingsItem({
                   key={option.value}
                   style={[
                     styles.optionItem,
-                    { borderBottomColor: Colors[colorScheme ?? 'light'].border },
+                    { borderBottomColor: Colors[theme].border },
                     value === option.value && { 
-                      backgroundColor: Colors[colorScheme ?? 'light'].highlightLight
+                      backgroundColor: Colors[theme].highlightLight
                     }
                   ]}
                   onPress={() => handleOptionSelect(option.value)}
                 >
                   <Text style={[
                     styles.optionText, 
-                    { color: Colors[colorScheme ?? 'light'].text },
+                    { color: Colors[theme].text },
                     value === option.value && { 
-                      color: Colors[colorScheme ?? 'light'].tint,
+                      color: Colors[theme].tint,
                       fontFamily: 'Inter-SemiBold'
                     }
                   ]}>
@@ -151,7 +151,7 @@ export default function SettingsItem({
                   {value === option.value && (
                     <View style={[
                       styles.selectedIndicator,
-                      { backgroundColor: Colors[colorScheme ?? 'light'].tint }
+                      { backgroundColor: Colors[theme].tint }
                     ]} />
                   )}
                 </TouchableOpacity>

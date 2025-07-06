@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { Search as SearchIcon, X } from 'lucide-react-native';
 import { useBibleSearch } from '@/hooks/useBibleSearch';
@@ -22,7 +22,7 @@ import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-font
 export default function SearchScreen() {
   const [query, setQuery] = useState('');
   const [activeSearch, setActiveSearch] = useState(false);
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   const { results, loading, error, performSearch, searchHistory, addToHistory, clearInput } = useBibleSearch();
 
   const [fontsLoaded] = useFonts({
@@ -32,8 +32,8 @@ export default function SearchScreen() {
 
   if (!fontsLoaded) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
-        <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+        <ActivityIndicator size="large" color={Colors[theme].tint} />
       </View>
     );
   }
@@ -59,16 +59,16 @@ export default function SearchScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: Colors[theme].background }]}>
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoidingView}
       >
         <View style={styles.headerContainer}>
-          <Text style={[styles.headerTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+          <Text style={[styles.headerTitle, { color: Colors[theme].text }]}>
             Search Scriptures
           </Text>
-          <Text style={[styles.headerSubtitle, { color: Colors[colorScheme ?? 'light'].textSecondary }]}>
+          <Text style={[styles.headerSubtitle, { color: Colors[theme].textSecondary }]}>
             Find verses by keyword or reference
           </Text>
         </View>
@@ -77,15 +77,15 @@ export default function SearchScreen() {
           <View style={[
             styles.searchBar, 
             { 
-              backgroundColor: Colors[colorScheme ?? 'light'].searchBarBackground,
-              borderColor: activeSearch ? Colors[colorScheme ?? 'light'].tint : 'transparent',
+              backgroundColor: Colors[theme].searchBarBackground,
+              borderColor: activeSearch ? Colors[theme].tint : 'transparent',
             }
           ]}>
-            <SearchIcon size={20} color={Colors[colorScheme ?? 'light'].textSecondary} />
+            <SearchIcon size={20} color={Colors[theme].textSecondary} />
             <TextInput
-              style={[styles.searchInput, { color: Colors[colorScheme ?? 'light'].text }]}
+              style={[styles.searchInput, { color: Colors[theme].text }]}
               placeholder="Search by keyword, verse, or topic..."
-              placeholderTextColor={Colors[colorScheme ?? 'light'].textSecondary}
+              placeholderTextColor={Colors[theme].textSecondary}
               value={query}
               onChangeText={setQuery}
               onSubmitEditing={handleSearch}
@@ -95,7 +95,7 @@ export default function SearchScreen() {
             />
             {query.length > 0 && (
               <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
-                <X size={18} color={Colors[colorScheme ?? 'light'].textSecondary} />
+                <X size={18} color={Colors[theme].textSecondary} />
               </TouchableOpacity>
             )}
           </View>
@@ -103,7 +103,7 @@ export default function SearchScreen() {
           <TouchableOpacity 
             style={[
               styles.searchButton, 
-              { backgroundColor: Colors[colorScheme ?? 'light'].tint },
+              { backgroundColor: Colors[theme].tint },
               query.length === 0 && styles.disabledButton
             ]} 
             onPress={handleSearch}
@@ -115,11 +115,11 @@ export default function SearchScreen() {
 
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
+            <ActivityIndicator size="large" color={Colors[theme].tint} />
           </View>
         ) : error ? (
           <View style={styles.errorContainer}>
-            <Text style={[styles.errorText, { color: Colors[colorScheme ?? 'light'].error }]}>
+            <Text style={[styles.errorText, { color: Colors[theme].error }]}>
               {error}
             </Text>
           </View>

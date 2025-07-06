@@ -24,15 +24,14 @@ import {
 } from 'lucide-react-native';
 import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import { useSettings } from '@/hooks/useSettings';
+import { useTheme } from '@/contexts/ThemeContext';
 import SettingsItem from '@/components/Settings/SettingsItem';
 import SettingsSection from '@/components/Settings/SettingsSection';
 
 export default function SettingsScreen() {
   // We're using _useColorScheme because we already defined useColorScheme in the settings hook
-  const systemColorScheme = _useColorScheme();
+  const { theme, toggleTheme } = useTheme();
   const { 
-    colorScheme, 
-    setColorScheme, 
     translation, 
     setTranslation,
     fontSize, 
@@ -46,18 +45,21 @@ export default function SettingsScreen() {
     'Inter-SemiBold': Inter_600SemiBold,
   });
 
+  const handleSetFontSize = (value: string) => setFontSize(value as 'small' | 'medium' | 'large');
+  const handleSetTranslation = (value: string) => setTranslation(value as 'kjv' | 'niv' | 'esv');
+
   if (!fontsLoaded) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[colorScheme].background }]}>
-        <ActivityIndicator size="large" color={Colors[colorScheme].tint} />
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+        <ActivityIndicator size="large" color={Colors[theme].tint} />
       </View>
     );
   }
 
-  const isDarkMode = colorScheme === 'dark';
+  const isDarkMode = theme === 'dark';
 
   const handleDarkModeToggle = () => {
-    setColorScheme(isDarkMode ? 'light' : 'dark');
+    toggleTheme();
   };
 
   const handleTextOnlyToggle = () => {
@@ -65,9 +67,9 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: Colors[colorScheme].background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: Colors[theme].background }]}>
       <View style={styles.headerContainer}>
-        <Text style={[styles.headerTitle, { color: Colors[colorScheme].text }]}>
+        <Text style={[styles.headerTitle, { color: Colors[theme].text }]}>
           Settings
         </Text>
       </View>
@@ -75,14 +77,14 @@ export default function SettingsScreen() {
       <ScrollView style={styles.scrollView}>
         <SettingsSection title="Appearance">
           <SettingsItem
-            icon={isDarkMode ? <Moon size={22} color={Colors[colorScheme].textSecondary} /> : <Sun size={22} color={Colors[colorScheme].textSecondary} />}
+            icon={isDarkMode ? <Moon size={22} color={Colors[theme].textSecondary} /> : <Sun size={22} color={Colors[theme].textSecondary} />}
             title="Dark Mode"
             type="switch"
             value={isDarkMode}
             onValueChange={handleDarkModeToggle}
           />
           <SettingsItem
-            icon={<FileText size={22} color={Colors[colorScheme].textSecondary} />}
+            icon={<FileText size={22} color={Colors[theme].textSecondary} />}
             title="Text Only Mode"
             description="Hide verse numbers and chapter headings"
             type="switch"
@@ -90,7 +92,7 @@ export default function SettingsScreen() {
             onValueChange={handleTextOnlyToggle}
           />
           <SettingsItem
-            icon={<BookOpen size={22} color={Colors[colorScheme].textSecondary} />}
+            icon={<BookOpen size={22} color={Colors[theme].textSecondary} />}
             title="Font Size"
             description={`${fontSize === 'small' ? 'Small' : fontSize === 'medium' ? 'Medium' : 'Large'}`}
             type="select"
@@ -100,13 +102,13 @@ export default function SettingsScreen() {
               { label: 'Medium', value: 'medium' },
               { label: 'Large', value: 'large' },
             ]}
-            onSelect={setFontSize}
+            onSelect={handleSetFontSize}
           />
         </SettingsSection>
 
         <SettingsSection title="Bible">
           <SettingsItem
-            icon={<BookOpen size={22} color={Colors[colorScheme].textSecondary} />}
+            icon={<BookOpen size={22} color={Colors[theme].textSecondary} />}
             title="Translation"
             description={`${translation === 'kjv' ? 'King James Version' : 
               translation === 'niv' ? 'New International Version' : 'English Standard Version'}`}
@@ -117,25 +119,25 @@ export default function SettingsScreen() {
               { label: 'New International Version (NIV)', value: 'niv' },
               { label: 'English Standard Version (ESV)', value: 'esv' },
             ]}
-            onSelect={setTranslation}
+            onSelect={handleSetTranslation}
           />
         </SettingsSection>
 
         <SettingsSection title="About">
           <SettingsItem
-            icon={<Info size={22} color={Colors[colorScheme].textSecondary} />}
+            icon={<Info size={22} color={Colors[theme].textSecondary} />}
             title="About Sage Bible"
             chevron
             onPress={() => {}}
           />
           <SettingsItem
-            icon={<ShareIcon size={22} color={Colors[colorScheme].textSecondary} />}
+            icon={<ShareIcon size={22} color={Colors[theme].textSecondary} />}
             title="Share App"
             chevron
             onPress={() => {}}
           />
           <SettingsItem
-            icon={<Heart size={22} color={Colors[colorScheme].textSecondary} />}
+            icon={<Heart size={22} color={Colors[theme].textSecondary} />}
             title="Rate App"
             chevron
             onPress={() => {}}

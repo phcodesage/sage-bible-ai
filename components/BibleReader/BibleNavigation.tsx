@@ -8,7 +8,7 @@ import {
   FlatList,
   Dimensions
 } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { ChevronDown, ChevronLeft, ChevronRight, X } from 'lucide-react-native';
 import { bibleBooks } from '@/constants/BibleData';
@@ -26,7 +26,7 @@ export default function BibleNavigation({
 }: BibleNavigationProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedBook, setSelectedBook] = useState(currentBook);
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   
   const bookIndex = bibleBooks.findIndex(book => book.name === currentBook);
   const chapterCount = bibleBooks[bookIndex]?.chapters || 1;
@@ -74,27 +74,27 @@ export default function BibleNavigation({
         style={[styles.navButton, styles.previousButton]} 
         onPress={goToPreviousChapter}
       >
-        <ChevronLeft size={22} color={Colors[colorScheme ?? 'light'].text} />
+        <ChevronLeft size={22} color={Colors[theme].text} />
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={[
           styles.selectionButton, 
-          { backgroundColor: Colors[colorScheme ?? 'light'].card }
+          { backgroundColor: Colors[theme].card }
         ]} 
         onPress={openSelectionModal}
       >
-        <Text style={[styles.selectionText, { color: Colors[colorScheme ?? 'light'].text }]}>
+        <Text style={[styles.selectionText, { color: Colors[theme].text }]}>
           {currentBook} {currentChapter}
         </Text>
-        <ChevronDown size={18} color={Colors[colorScheme ?? 'light'].text} />
+        <ChevronDown size={18} color={Colors[theme].text} />
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={[styles.navButton, styles.nextButton]} 
         onPress={goToNextChapter}
       >
-        <ChevronRight size={22} color={Colors[colorScheme ?? 'light'].text} />
+        <ChevronRight size={22} color={Colors[theme].text} />
       </TouchableOpacity>
       
       <Modal
@@ -106,24 +106,24 @@ export default function BibleNavigation({
         <View style={styles.modalOverlay}>
           <View style={[
             styles.modalContainer, 
-            { backgroundColor: Colors[colorScheme ?? 'light'].background }
+            { backgroundColor: Colors[theme].background }
           ]}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+              <Text style={[styles.modalTitle, { color: Colors[theme].text }]}>
                 Select Book & Chapter
               </Text>
               <TouchableOpacity 
                 style={styles.closeButton} 
                 onPress={() => setModalVisible(false)}
               >
-                <X size={24} color={Colors[colorScheme ?? 'light'].text} />
+                <X size={24} color={Colors[theme].text} />
               </TouchableOpacity>
             </View>
             
             <View style={styles.selectionContent}>
               <View style={[
                 styles.booksContainer, 
-                { borderColor: Colors[colorScheme ?? 'light'].border }
+                { borderColor: Colors[theme].border }
               ]}>
                 <FlatList
                   data={bibleBooks}
@@ -133,14 +133,14 @@ export default function BibleNavigation({
                       style={[
                         styles.bookItem, 
                         selectedBook === item.name && {
-                          backgroundColor: Colors[colorScheme ?? 'light'].tint,
+                          backgroundColor: Colors[theme].tint,
                         }
                       ]} 
                       onPress={() => selectBook(item.name)}
                     >
                       <Text style={[
                         styles.bookName, 
-                        { color: selectedBook === item.name ? '#fff' : Colors[colorScheme ?? 'light'].text }
+                        { color: selectedBook === item.name ? '#fff' : Colors[theme].text }
                       ]}>
                         {item.name}
                       </Text>
@@ -159,11 +159,11 @@ export default function BibleNavigation({
                     <TouchableOpacity 
                       style={[
                         styles.chapterItem, 
-                        { borderColor: Colors[colorScheme ?? 'light'].border }
+                        { borderColor: Colors[theme].border }
                       ]} 
                       onPress={() => confirmSelection(selectedBook, item)}
                     >
-                      <Text style={[styles.chapterNumber, { color: Colors[colorScheme ?? 'light'].text }]}>
+                      <Text style={[styles.chapterNumber, { color: Colors[theme].text }]}>
                         {item}
                       </Text>
                     </TouchableOpacity>

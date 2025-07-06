@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { ExternalLink, Bookmark } from 'lucide-react-native';
 import { router } from 'expo-router';
@@ -13,7 +13,7 @@ interface SearchResultItemProps {
 }
 
 export default function SearchResultItem({ result }: SearchResultItemProps) {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   const { addBookmark, isBookmarked } = useBookmarks();
   
   const handleNavigateToVerse = () => {
@@ -37,7 +37,7 @@ export default function SearchResultItem({ result }: SearchResultItemProps) {
     const parts = text.split(pattern);
     
     return (
-      <Text style={[styles.text, { color: Colors[colorScheme ?? 'light'].text }]}>
+      <Text style={[styles.text, { color: Colors[theme].text }]}>
         {parts.map((part, index) => {
           const isMatch = words.some(word => 
             part.toLowerCase() === word.toLowerCase()
@@ -48,7 +48,7 @@ export default function SearchResultItem({ result }: SearchResultItemProps) {
               key={index} 
               style={[
                 styles.highlight,
-                { backgroundColor: Colors[colorScheme ?? 'light'].highlight }
+                { backgroundColor: Colors[theme].highlight }
               ]}
             >
               {part}
@@ -68,7 +68,7 @@ export default function SearchResultItem({ result }: SearchResultItemProps) {
       entering={FadeIn.duration(300)}
       style={[
         styles.container,
-        { backgroundColor: Colors[colorScheme ?? 'light'].card }
+        { backgroundColor: Colors[theme].card }
       ]}
     >
       <TouchableOpacity 
@@ -77,7 +77,7 @@ export default function SearchResultItem({ result }: SearchResultItemProps) {
         activeOpacity={0.7}
       >
         <View style={styles.header}>
-          <Text style={[styles.reference, { color: Colors[colorScheme ?? 'light'].text }]}>
+          <Text style={[styles.reference, { color: Colors[theme].text }]}>
             {result.book} {result.chapter}:{result.verse}
           </Text>
           <View style={styles.actions}>
@@ -87,15 +87,15 @@ export default function SearchResultItem({ result }: SearchResultItemProps) {
             >
               <Bookmark 
                 size={20} 
-                color={Colors[colorScheme ?? 'light'].tint}
-                fill={isVerseBookmarked ? Colors[colorScheme ?? 'light'].tint : 'transparent'}
+                color={Colors[theme].tint}
+                fill={isVerseBookmarked ? Colors[theme].tint : 'transparent'}
               />
             </TouchableOpacity>
             <TouchableOpacity 
               onPress={handleNavigateToVerse}
               style={styles.actionButton}
             >
-              <ExternalLink size={20} color={Colors[colorScheme ?? 'light'].tint} />
+              <ExternalLink size={20} color={Colors[theme].tint} />
             </TouchableOpacity>
           </View>
         </View>

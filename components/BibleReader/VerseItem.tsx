@@ -8,7 +8,7 @@ import {
   Alert,
   ScrollView
 } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { Share as ShareIcon, Bookmark, Copy, X, Pencil, Link, Highlighter, MessageSquare } from 'lucide-react-native';
 import { useSettings } from '@/hooks/useSettings';
@@ -40,7 +40,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
   const [notesVisible, setNotesVisible] = useState(false);
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
   
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   const { fontSize, textOnly } = useSettings();
   const { 
     addNote, 
@@ -162,7 +162,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
           {!textOnly && (
             <Text style={[
               styles.verseNumber, 
-              { color: Colors[colorScheme ?? 'light'].tint }
+              { color: Colors[theme].tint }
             ]}>
               {verse.number}
             </Text>
@@ -170,7 +170,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
           <Text style={[
             styles.verseText, 
             { 
-              color: Colors[colorScheme ?? 'light'].text,
+              color: Colors[theme].text,
               fontSize: getFontSize(),
               backgroundColor: highlight ? highlight.color : 'transparent',
             }
@@ -178,14 +178,14 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
             {verse.text} {isBookmarked && (
               <Bookmark 
                 size={16} 
-                color={Colors[colorScheme ?? 'light'].tint} 
-                fill={Colors[colorScheme ?? 'light'].tint}
+                color={Colors[theme].tint} 
+                fill={Colors[theme].tint}
               />
             )}
             {notes.length > 0 && (
               <MessageSquare 
                 size={16} 
-                color={Colors[colorScheme ?? 'light'].tint} 
+                color={Colors[theme].tint} 
               />
             )}
           </Text>
@@ -207,21 +207,21 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
             entering={FadeIn.duration(200)}
             style={[
               styles.modalContainer, 
-              { backgroundColor: Colors[colorScheme ?? 'light'].card }
+              { backgroundColor: Colors[theme].card }
             ]}
           >
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+              <Text style={[styles.modalTitle, { color: Colors[theme].text }]}>
                 {book} {chapter}:{verse.number}
               </Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <X size={20} color={Colors[colorScheme ?? 'light'].text} />
+                <X size={20} color={Colors[theme].text} />
               </TouchableOpacity>
             </View>
             
             <Text style={[
               styles.modalVerseText, 
-              { color: Colors[colorScheme ?? 'light'].text }
+              { color: Colors[theme].text }
             ]}>
               {verse.text}
             </Text>
@@ -232,10 +232,10 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleShareVerse}
                 >
-                  <ShareIcon size={22} color={Colors[colorScheme ?? 'light'].tint} />
+                  <ShareIcon size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
-                    { color: Colors[colorScheme ?? 'light'].text }
+                    { color: Colors[theme].text }
                   ]}>
                     Share
                   </Text>
@@ -245,10 +245,10 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleCopyVerse}
                 >
-                  <Copy size={22} color={Colors[colorScheme ?? 'light'].tint} />
+                  <Copy size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
-                    { color: Colors[colorScheme ?? 'light'].text }
+                    { color: Colors[theme].text }
                   ]}>
                     Copy
                   </Text>
@@ -260,12 +260,12 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                 >
                   <Bookmark 
                     size={22} 
-                    color={Colors[colorScheme ?? 'light'].tint}
-                    fill={isBookmarked ? Colors[colorScheme ?? 'light'].tint : 'transparent'} 
+                    color={Colors[theme].tint}
+                    fill={isBookmarked ? Colors[theme].tint : 'transparent'} 
                   />
                   <Text style={[
                     styles.actionText, 
-                    { color: Colors[colorScheme ?? 'light'].text }
+                    { color: Colors[theme].text }
                   ]}>
                     {isBookmarked ? 'Unbookmark' : 'Bookmark'}
                   </Text>
@@ -275,10 +275,10 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleAddNote}
                 >
-                  <Pencil size={22} color={Colors[colorScheme ?? 'light'].tint} />
+                  <Pencil size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
-                    { color: Colors[colorScheme ?? 'light'].text }
+                    { color: Colors[theme].text }
                   ]}>
                     Add Note
                   </Text>
@@ -288,10 +288,10 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleHighlight}
                 >
-                  <Highlighter size={22} color={Colors[colorScheme ?? 'light'].tint} />
+                  <Highlighter size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
-                    { color: Colors[colorScheme ?? 'light'].text }
+                    { color: Colors[theme].text }
                   ]}>
                     Highlight
                   </Text>
@@ -301,10 +301,10 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleAddCrossReference}
                 >
-                  <Link size={22} color={Colors[colorScheme ?? 'light'].tint} />
+                  <Link size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
-                    { color: Colors[colorScheme ?? 'light'].text }
+                    { color: Colors[theme].text }
                   ]}>
                     Cross Ref
                   </Text>
@@ -315,10 +315,10 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                     style={styles.actionButton} 
                     onPress={handleViewNotes}
                   >
-                    <MessageSquare size={22} color={Colors[colorScheme ?? 'light'].tint} />
+                    <MessageSquare size={22} color={Colors[theme].tint} />
                     <Text style={[
                       styles.actionText, 
-                      { color: Colors[colorScheme ?? 'light'].text }
+                      { color: Colors[theme].text }
                     ]}>
                       View Notes
                     </Text>
@@ -369,13 +369,13 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
         transparent={true}
         onRequestClose={() => setNotesVisible(false)}
       >
-        <View style={[styles.notesModalContainer, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
+        <View style={[styles.notesModalContainer, { backgroundColor: Colors[theme].background }]}>
           <View style={styles.notesModalHeader}>
-            <Text style={[styles.notesModalTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+            <Text style={[styles.notesModalTitle, { color: Colors[theme].text }]}>
               Notes for {verseId}
             </Text>
             <TouchableOpacity onPress={() => setNotesVisible(false)} style={styles.closeButton}>
-              <X size={24} color={Colors[colorScheme ?? 'light'].text} />
+              <X size={24} color={Colors[theme].text} />
             </TouchableOpacity>
           </View>
           

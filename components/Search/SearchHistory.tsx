@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { Clock, Trash2 } from 'lucide-react-native';
 import { useBibleSearch } from '@/hooks/useBibleSearch';
@@ -11,14 +11,14 @@ interface SearchHistoryProps {
 }
 
 export default function SearchHistory({ history, onPress }: SearchHistoryProps) {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   const { removeFromHistory, clearHistory } = useBibleSearch();
   
   if (history.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Clock size={50} color={Colors[colorScheme ?? 'light'].textSecondary} />
-        <Text style={[styles.emptyText, { color: Colors[colorScheme ?? 'light'].textSecondary }]}>
+        <Clock size={50} color={Colors[theme].textSecondary} />
+        <Text style={[styles.emptyText, { color: Colors[theme].textSecondary }]}>
           No recent searches
         </Text>
       </View>
@@ -28,12 +28,12 @@ export default function SearchHistory({ history, onPress }: SearchHistoryProps) 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: Colors[colorScheme ?? 'light'].text }]}>
+        <Text style={[styles.title, { color: Colors[theme].text }]}>
           Recent Searches
         </Text>
         {history.length > 0 && (
           <TouchableOpacity onPress={clearHistory}>
-            <Text style={[styles.clearText, { color: Colors[colorScheme ?? 'light'].tint }]}>
+            <Text style={[styles.clearText, { color: Colors[theme].tint }]}>
               Clear All
             </Text>
           </TouchableOpacity>
@@ -46,20 +46,20 @@ export default function SearchHistory({ history, onPress }: SearchHistoryProps) 
         renderItem={({ item }) => (
           <View style={[
             styles.historyItem,
-            { borderBottomColor: Colors[colorScheme ?? 'light'].border }
+            { borderBottomColor: Colors[theme].border }
           ]}>
             <TouchableOpacity 
               style={styles.historyContent}
               onPress={() => onPress(item)}
             >
-              <Clock size={16} color={Colors[colorScheme ?? 'light'].textSecondary} />
-              <Text style={[styles.historyText, { color: Colors[colorScheme ?? 'light'].text }]}>
+              <Clock size={16} color={Colors[theme].textSecondary} />
+              <Text style={[styles.historyText, { color: Colors[theme].text }]}>
                 {item}
               </Text>
             </TouchableOpacity>
             
             <TouchableOpacity onPress={() => removeFromHistory(item)}>
-              <Trash2 size={18} color={Colors[colorScheme ?? 'light'].textSecondary} />
+              <Trash2 size={18} color={Colors[theme].textSecondary} />
             </TouchableOpacity>
           </View>
         )}

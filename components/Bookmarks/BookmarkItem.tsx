@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { ExternalLink, Trash } from 'lucide-react-native';
 import { router } from 'expo-router';
@@ -14,7 +14,7 @@ interface BookmarkItemProps {
 }
 
 export default function BookmarkItem({ bookmark, onRemove, isEditing }: BookmarkItemProps) {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   
   const handleNavigateToVerse = () => {
     if (isEditing) return;
@@ -33,12 +33,12 @@ export default function BookmarkItem({ bookmark, onRemove, isEditing }: Bookmark
       <TouchableOpacity 
         style={[
           styles.bookmarkCard,
-          { backgroundColor: Colors[colorScheme ?? 'light'].card }
+          { backgroundColor: Colors[theme].card }
         ]}
         onPress={handleNavigateToVerse}
       >
         <View style={styles.header}>
-          <Text style={[styles.reference, { color: Colors[colorScheme ?? 'light'].text }]}>
+          <Text style={[styles.reference, { color: Colors[theme].text }]}>
             {bookmark.book} {bookmark.chapter}:{bookmark.verse}
           </Text>
           
@@ -46,7 +46,7 @@ export default function BookmarkItem({ bookmark, onRemove, isEditing }: Bookmark
             <TouchableOpacity 
               style={[
                 styles.removeButton, 
-                { backgroundColor: Colors[colorScheme ?? 'light'].error }
+                { backgroundColor: Colors[theme].error }
               ]} 
               onPress={() => onRemove(bookmark.id)}
             >
@@ -54,19 +54,19 @@ export default function BookmarkItem({ bookmark, onRemove, isEditing }: Bookmark
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={handleNavigateToVerse}>
-              <ExternalLink size={18} color={Colors[colorScheme ?? 'light'].tint} />
+              <ExternalLink size={18} color={Colors[theme].tint} />
             </TouchableOpacity>
           )}
         </View>
         
         <Text 
-          style={[styles.verseText, { color: Colors[colorScheme ?? 'light'].text }]}
+          style={[styles.verseText, { color: Colors[theme].text }]}
           numberOfLines={3}
         >
           {bookmark.text}
         </Text>
         
-        <Text style={[styles.date, { color: Colors[colorScheme ?? 'light'].textSecondary }]}>
+        <Text style={[styles.date, { color: Colors[theme].textSecondary }]}>
           {new Date(bookmark.timestamp).toLocaleDateString()}
         </Text>
       </TouchableOpacity>

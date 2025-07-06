@@ -11,7 +11,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { Send } from 'lucide-react-native';
 import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
@@ -20,7 +20,7 @@ import { useAI } from '@/hooks/useAI';
 
 export default function AskScreen() {
   const [message, setMessage] = useState('');
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   const scrollViewRef = useRef(null);
   const { messages, sendMessage, isLoading } = useAI();
 
@@ -31,8 +31,8 @@ export default function AskScreen() {
 
   if (!fontsLoaded) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
-        <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+        <ActivityIndicator size="large" color={Colors[theme].tint} />
       </View>
     );
   }
@@ -51,16 +51,16 @@ export default function AskScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: Colors[theme].background }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoidingView}
       >
         <View style={styles.headerContainer}>
-          <Text style={[styles.headerTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+          <Text style={[styles.headerTitle, { color: Colors[theme].text }]}>
             Bible AI Assistant
           </Text>
-          <Text style={[styles.headerSubtitle, { color: Colors[colorScheme ?? 'light'].textSecondary }]}>
+          <Text style={[styles.headerSubtitle, { color: Colors[theme].textSecondary }]}>
             Ask questions about Bible topics
           </Text>
         </View>
@@ -73,40 +73,40 @@ export default function AskScreen() {
         >
           {messages.length === 0 ? (
             <View style={styles.welcomeContainer}>
-              <Text style={[styles.welcomeTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+              <Text style={[styles.welcomeTitle, { color: Colors[theme].text }]}>
                 Welcome to Sage Bible AI
               </Text>
-              <Text style={[styles.welcomeText, { color: Colors[colorScheme ?? 'light'].textSecondary }]}>
+              <Text style={[styles.welcomeText, { color: Colors[theme].textSecondary }]}>
                 Ask me any question about the Bible, theology, biblical history, or related topics.
               </Text>
               <View style={styles.suggestionsContainer}>
                 <TouchableOpacity 
                   style={[styles.suggestionButton, 
-                    { backgroundColor: Colors[colorScheme ?? 'light'].card }
+                    { backgroundColor: Colors[theme].card }
                   ]}
                   onPress={() => sendMessage("What does the Bible say about love?")}
                 >
-                  <Text style={[styles.suggestionText, { color: Colors[colorScheme ?? 'light'].text }]}>
+                  <Text style={[styles.suggestionText, { color: Colors[theme].text }]}>
                     What does the Bible say about love?
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                   style={[styles.suggestionButton, 
-                    { backgroundColor: Colors[colorScheme ?? 'light'].card }
+                    { backgroundColor: Colors[theme].card }
                   ]}
                   onPress={() => sendMessage("Explain the Sermon on the Mount")}
                 >
-                  <Text style={[styles.suggestionText, { color: Colors[colorScheme ?? 'light'].text }]}>
+                  <Text style={[styles.suggestionText, { color: Colors[theme].text }]}>
                     Explain the Sermon on the Mount
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                   style={[styles.suggestionButton, 
-                    { backgroundColor: Colors[colorScheme ?? 'light'].card }
+                    { backgroundColor: Colors[theme].card }
                   ]}
                   onPress={() => sendMessage("Who were the 12 disciples?")}
                 >
-                  <Text style={[styles.suggestionText, { color: Colors[colorScheme ?? 'light'].text }]}>
+                  <Text style={[styles.suggestionText, { color: Colors[theme].text }]}>
                     Who were the 12 disciples?
                   </Text>
                 </TouchableOpacity>
@@ -124,8 +124,8 @@ export default function AskScreen() {
           
           {isLoading && (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" color={Colors[colorScheme ?? 'light'].tint} />
-              <Text style={[styles.loadingText, { color: Colors[colorScheme ?? 'light'].textSecondary }]}>
+              <ActivityIndicator size="small" color={Colors[theme].tint} />
+              <Text style={[styles.loadingText, { color: Colors[theme].textSecondary }]}>
                 Thinking...
               </Text>
             </View>
@@ -134,12 +134,12 @@ export default function AskScreen() {
 
         <View style={[
           styles.inputContainer, 
-          { backgroundColor: Colors[colorScheme ?? 'light'].card }
+          { backgroundColor: Colors[theme].card }
         ]}>
           <TextInput
-            style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
+            style={[styles.input, { color: Colors[theme].text }]}
             placeholder="Ask about the Bible..."
-            placeholderTextColor={Colors[colorScheme ?? 'light'].textSecondary}
+            placeholderTextColor={Colors[theme].textSecondary}
             value={message}
             onChangeText={setMessage}
             multiline
@@ -150,7 +150,7 @@ export default function AskScreen() {
           <TouchableOpacity 
             style={[
               styles.sendButton, 
-              { backgroundColor: Colors[colorScheme ?? 'light'].tint },
+              { backgroundColor: Colors[theme].tint },
               message.trim().length === 0 && styles.disabledButton
             ]} 
             onPress={handleSend}

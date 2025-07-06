@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { X, Bookmark, BookmarkX } from 'lucide-react-native';
 import { useBookmarks } from '@/hooks/useBookmarks';
@@ -17,7 +17,7 @@ import BookmarkItem from '@/components/Bookmarks/BookmarkItem';
 import EmptyState from '@/components/UI/EmptyState';
 
 export default function BookmarksScreen() {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   const { bookmarks, removeBookmark, clearAllBookmarks } = useBookmarks();
   const [isEditing, setIsEditing] = useState(false);
   
@@ -28,8 +28,8 @@ export default function BookmarksScreen() {
 
   if (!fontsLoaded) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
-        <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+        <ActivityIndicator size="large" color={Colors[theme].tint} />
       </View>
     );
   }
@@ -43,14 +43,14 @@ export default function BookmarksScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: Colors[theme].background }]}>
       <View style={styles.headerContainer}>
         <View style={styles.titleContainer}>
-          <Text style={[styles.headerTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+          <Text style={[styles.headerTitle, { color: Colors[theme].text }]}>
             Bookmarks
           </Text>
           {bookmarks.length > 0 && (
-            <Text style={[styles.bookmarkCount, { color: Colors[colorScheme ?? 'light'].textSecondary }]}>
+            <Text style={[styles.bookmarkCount, { color: Colors[theme].textSecondary }]}>
               {bookmarks.length} {bookmarks.length === 1 ? 'verse' : 'verses'}
             </Text>
           )}
@@ -64,7 +64,7 @@ export default function BookmarksScreen() {
             >
               <Text style={[
                 styles.editButtonText, 
-                { color: isEditing ? '#fff' : Colors[colorScheme ?? 'light'].tint }
+                { color: isEditing ? '#fff' : Colors[theme].tint }
               ]}>
                 {isEditing ? 'Done' : 'Edit'}
               </Text>
@@ -72,10 +72,10 @@ export default function BookmarksScreen() {
             
             {isEditing && (
               <TouchableOpacity 
-                style={[styles.clearButton, { borderColor: Colors[colorScheme ?? 'light'].error }]} 
+                style={[styles.clearButton, { borderColor: Colors[theme].error }]} 
                 onPress={clearAllBookmarks}
               >
-                <Text style={[styles.clearButtonText, { color: Colors[colorScheme ?? 'light'].error }]}>
+                <Text style={[styles.clearButtonText, { color: Colors[theme].error }]}>
                   Clear All
                 </Text>
               </TouchableOpacity>
@@ -86,7 +86,7 @@ export default function BookmarksScreen() {
 
       {bookmarks.length === 0 ? (
         <EmptyState 
-          icon={<Bookmark size={60} color={Colors[colorScheme ?? 'light'].textSecondary} />}
+          icon={<Bookmark size={60} color={Colors[theme].textSecondary} />}
           title="No bookmarks yet"
           message="Save your favorite verses for quick access later"
         />

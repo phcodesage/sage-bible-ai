@@ -4,7 +4,7 @@ import { useFonts, PlayfairDisplay_400Regular, PlayfairDisplay_700Bold } from '@
 import { Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import { useBible } from '@/hooks/useBible';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import BibleNavigation from '@/components/BibleReader/BibleNavigation';
 import Colors from '@/constants/Colors';
 import { Share, ChevronUp } from 'lucide-react-native';
@@ -15,7 +15,7 @@ import VerseItem from '@/components/BibleReader/VerseItem';
 export default function ReadScreen() {
   const [book, setBook] = useState('Genesis');
   const [chapter, setChapter] = useState(1);
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   const { bibleContent, loading, error } = useBible(book, chapter);
   const { addBookmark, isBookmarked } = useBookmarks();
   const [scrollToTopVisible, setScrollToTopVisible] = useState(false);
@@ -38,8 +38,8 @@ export default function ReadScreen() {
 
   if (!fontsLoaded) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
-        <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+        <ActivityIndicator size="large" color={Colors[theme].tint} />
       </View>
     );
   }
@@ -51,16 +51,16 @@ export default function ReadScreen() {
 
   if (loading) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
-        <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+        <ActivityIndicator size="large" color={Colors[theme].tint} />
       </View>
     );
   }
 
   if (error) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
-        <Text style={[styles.errorText, { color: Colors[colorScheme ?? 'light'].error }]}>
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+        <Text style={[styles.errorText, { color: Colors[theme].error }]}>
           Error loading Bible content. Please try again.
         </Text>
       </View>
@@ -68,9 +68,9 @@ export default function ReadScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: Colors[theme].background }]}>
       <View style={styles.headerContainer}>
-        <Text style={[styles.headerTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+        <Text style={[styles.headerTitle, { color: Colors[theme].text }]}>
           {book} {chapter}
         </Text>
         <BibleNavigation 
@@ -87,7 +87,7 @@ export default function ReadScreen() {
         onScroll={onScroll}
         scrollEventThrottle={16}
       >
-        <Text style={[styles.chapterTitle, { color: Colors[colorScheme ?? 'light'].text }]}>
+        <Text style={[styles.chapterTitle, { color: Colors[theme].text }]}>
           Chapter {chapter}
         </Text>
         
@@ -111,7 +111,7 @@ export default function ReadScreen() {
       
       {scrollToTopVisible && (
         <TouchableOpacity 
-          style={[styles.scrollToTop, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]} 
+          style={[styles.scrollToTop, { backgroundColor: Colors[theme].tint }]} 
           onPress={() => scrollToTop()}>
           <ChevronUp color="#FFF" size={24} />
         </TouchableOpacity>

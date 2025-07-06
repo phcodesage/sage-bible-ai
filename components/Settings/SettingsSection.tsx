@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 
 interface SettingsSectionProps {
@@ -9,19 +9,19 @@ interface SettingsSectionProps {
 }
 
 export default function SettingsSection({ title, children }: SettingsSectionProps) {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   
   return (
     <View style={styles.container}>
       <Text style={[
         styles.sectionTitle, 
-        { color: Colors[colorScheme ?? 'light'].tint }
+        { color: Colors[theme].tint }
       ]}>
         {title}
       </Text>
       <View style={[
         styles.contentContainer,
-        { backgroundColor: Colors[colorScheme ?? 'light'].card }
+        { backgroundColor: Colors[theme].card }
       ]}>
         {children}
       </View>

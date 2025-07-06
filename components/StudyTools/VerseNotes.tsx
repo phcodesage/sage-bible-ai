@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { Note, Annotation, CrossReference } from '@/types/studyTools';
 import { Edit, Trash2, ExternalLink } from 'lucide-react-native';
@@ -36,7 +36,7 @@ export default function VerseNotes({
   onNavigateToCrossReference,
   onDeleteCrossReference,
 }: VerseNotesProps) {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString();
@@ -49,7 +49,7 @@ export default function VerseNotes({
       <View style={styles.emptyContainer}>
         <Text style={[
           styles.emptyText,
-          { color: Colors[colorScheme ?? 'light'].textSecondary }
+          { color: Colors[theme].textSecondary }
         ]}>
           No notes or annotations for this verse.
         </Text>
@@ -64,7 +64,7 @@ export default function VerseNotes({
         <View style={styles.section}>
           <Text style={[
             styles.sectionTitle,
-            { color: Colors[colorScheme ?? 'light'].text }
+            { color: Colors[theme].text }
           ]}>
             Notes
           </Text>
@@ -74,12 +74,12 @@ export default function VerseNotes({
               key={note.id} 
               style={[
                 styles.noteContainer,
-                { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }
+                { backgroundColor: Colors[theme].cardBackground }
               ]}
             >
               <Text style={[
                 styles.noteContent,
-                { color: Colors[colorScheme ?? 'light'].text }
+                { color: Colors[theme].text }
               ]}>
                 {note.content}
               </Text>
@@ -87,7 +87,7 @@ export default function VerseNotes({
               <View style={styles.noteFooter}>
                 <Text style={[
                   styles.noteDate,
-                  { color: Colors[colorScheme ?? 'light'].textSecondary }
+                  { color: Colors[theme].textSecondary }
                 ]}>
                   {formatDate(note.updatedAt)}
                 </Text>
@@ -97,14 +97,14 @@ export default function VerseNotes({
                     onPress={() => onEditNote(note)}
                     style={styles.actionButton}
                   >
-                    <Edit size={16} color={Colors[colorScheme ?? 'light'].tint} />
+                    <Edit size={16} color={Colors[theme].tint} />
                   </TouchableOpacity>
                   
                   <TouchableOpacity 
                     onPress={() => onDeleteNote(note.id)}
                     style={styles.actionButton}
                   >
-                    <Trash2 size={16} color={Colors[colorScheme ?? 'light'].error} />
+                    <Trash2 size={16} color={Colors[theme].error} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -118,7 +118,7 @@ export default function VerseNotes({
         <View style={styles.section}>
           <Text style={[
             styles.sectionTitle,
-            { color: Colors[colorScheme ?? 'light'].text }
+            { color: Colors[theme].text }
           ]}>
             Annotations
           </Text>
@@ -128,12 +128,12 @@ export default function VerseNotes({
               key={annotation.id} 
               style={[
                 styles.noteContainer,
-                { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }
+                { backgroundColor: Colors[theme].cardBackground }
               ]}
             >
               <Text style={[
                 styles.noteContent,
-                { color: Colors[colorScheme ?? 'light'].text }
+                { color: Colors[theme].text }
               ]}>
                 {annotation.text}
               </Text>
@@ -141,7 +141,7 @@ export default function VerseNotes({
               <View style={styles.noteFooter}>
                 <Text style={[
                   styles.noteDate,
-                  { color: Colors[colorScheme ?? 'light'].textSecondary }
+                  { color: Colors[theme].textSecondary }
                 ]}>
                   {formatDate(annotation.updatedAt)}
                 </Text>
@@ -151,14 +151,14 @@ export default function VerseNotes({
                     onPress={() => onEditAnnotation(annotation)}
                     style={styles.actionButton}
                   >
-                    <Edit size={16} color={Colors[colorScheme ?? 'light'].tint} />
+                    <Edit size={16} color={Colors[theme].tint} />
                   </TouchableOpacity>
                   
                   <TouchableOpacity 
                     onPress={() => onDeleteAnnotation(annotation.id)}
                     style={styles.actionButton}
                   >
-                    <Trash2 size={16} color={Colors[colorScheme ?? 'light'].error} />
+                    <Trash2 size={16} color={Colors[theme].error} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -172,7 +172,7 @@ export default function VerseNotes({
         <View style={styles.section}>
           <Text style={[
             styles.sectionTitle,
-            { color: Colors[colorScheme ?? 'light'].text }
+            { color: Colors[theme].text }
           ]}>
             Cross References
           </Text>
@@ -186,13 +186,13 @@ export default function VerseNotes({
                 key={crossRef.id} 
                 style={[
                   styles.crossRefContainer,
-                  { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }
+                  { backgroundColor: Colors[theme].cardBackground }
                 ]}
               >
                 <View style={styles.crossRefHeader}>
                   <Text style={[
                     styles.crossRefVerse,
-                    { color: Colors[colorScheme ?? 'light'].tint }
+                    { color: Colors[theme].tint }
                   ]}>
                     {linkedVerseId}
                   </Text>
@@ -201,14 +201,14 @@ export default function VerseNotes({
                     onPress={() => onNavigateToCrossReference(linkedVerseId)}
                     style={styles.navigateButton}
                   >
-                    <ExternalLink size={16} color={Colors[colorScheme ?? 'light'].tint} />
+                    <ExternalLink size={16} color={Colors[theme].tint} />
                   </TouchableOpacity>
                 </View>
                 
                 {crossRef.note && (
                   <Text style={[
                     styles.crossRefNote,
-                    { color: Colors[colorScheme ?? 'light'].text }
+                    { color: Colors[theme].text }
                   ]}>
                     {crossRef.note}
                   </Text>
@@ -217,7 +217,7 @@ export default function VerseNotes({
                 <View style={styles.noteFooter}>
                   <Text style={[
                     styles.noteDate,
-                    { color: Colors[colorScheme ?? 'light'].textSecondary }
+                    { color: Colors[theme].textSecondary }
                   ]}>
                     {formatDate(crossRef.createdAt)}
                   </Text>
@@ -226,7 +226,7 @@ export default function VerseNotes({
                     onPress={() => onDeleteCrossReference(crossRef.id)}
                     style={styles.actionButton}
                   >
-                    <Trash2 size={16} color={Colors[colorScheme ?? 'light'].error} />
+                    <Trash2 size={16} color={Colors[theme].error} />
                   </TouchableOpacity>
                 </View>
               </View>

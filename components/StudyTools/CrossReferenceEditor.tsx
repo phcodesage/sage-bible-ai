@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { X, Save, Search } from 'lucide-react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 
 interface CrossReferenceEditorProps {
@@ -33,7 +33,7 @@ export default function CrossReferenceEditor({
   const [note, setNote] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<{ id: string; text: string }[]>([]);
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
 
   const handleSearch = () => {
     // This is a mock implementation. In a real app, you would search the Bible API
@@ -80,17 +80,17 @@ export default function CrossReferenceEditor({
       >
         <View style={[
           styles.container,
-          { backgroundColor: Colors[colorScheme ?? 'light'].background }
+          { backgroundColor: Colors[theme].background }
         ]}>
           <View style={styles.header}>
             <Text style={[
               styles.headerTitle,
-              { color: Colors[colorScheme ?? 'light'].text }
+              { color: Colors[theme].text }
             ]}>
               Add Cross Reference
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <X size={24} color={Colors[colorScheme ?? 'light'].text} />
+              <X size={24} color={Colors[theme].text} />
             </TouchableOpacity>
           </View>
 
@@ -99,20 +99,20 @@ export default function CrossReferenceEditor({
             <View style={styles.sectionContainer}>
               <Text style={[
                 styles.sectionTitle,
-                { color: Colors[colorScheme ?? 'light'].textSecondary }
+                { color: Colors[theme].textSecondary }
               ]}>
                 From
               </Text>
               <View style={styles.verseContainer}>
                 <Text style={[
                   styles.verseId,
-                  { color: Colors[colorScheme ?? 'light'].tint }
+                  { color: Colors[theme].tint }
                 ]}>
                   {sourceVerseId}
                 </Text>
                 <Text style={[
                   styles.verseText,
-                  { color: Colors[colorScheme ?? 'light'].text }
+                  { color: Colors[theme].text }
                 ]}>
                   {sourceVerseText}
                 </Text>
@@ -123,7 +123,7 @@ export default function CrossReferenceEditor({
             <View style={styles.sectionContainer}>
               <Text style={[
                 styles.sectionTitle,
-                { color: Colors[colorScheme ?? 'light'].textSecondary }
+                { color: Colors[theme].textSecondary }
               ]}>
                 To
               </Text>
@@ -131,11 +131,11 @@ export default function CrossReferenceEditor({
               {targetVerseId ? (
                 <View style={[
                   styles.selectedVerseContainer,
-                  { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }
+                  { backgroundColor: Colors[theme].cardBackground }
                 ]}>
                   <Text style={[
                     styles.verseId,
-                    { color: Colors[colorScheme ?? 'light'].tint }
+                    { color: Colors[theme].tint }
                   ]}>
                     {targetVerseId}
                   </Text>
@@ -145,7 +145,7 @@ export default function CrossReferenceEditor({
                   >
                     <Text style={[
                       styles.changeButtonText,
-                      { color: Colors[colorScheme ?? 'light'].tint }
+                      { color: Colors[theme].tint }
                     ]}>
                       Change
                     </Text>
@@ -155,22 +155,22 @@ export default function CrossReferenceEditor({
                 <View style={styles.searchContainer}>
                   <View style={[
                     styles.searchInputContainer,
-                    { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }
+                    { backgroundColor: Colors[theme].cardBackground }
                   ]}>
                     <TextInput
                       style={[
                         styles.searchInput,
-                        { color: Colors[colorScheme ?? 'light'].text }
+                        { color: Colors[theme].text }
                       ]}
                       placeholder="Search by reference or keyword..."
-                      placeholderTextColor={Colors[colorScheme ?? 'light'].textSecondary}
+                      placeholderTextColor={Colors[theme].textSecondary}
                       value={searchQuery}
                       onChangeText={setSearchQuery}
                       onSubmitEditing={handleSearch}
                       returnKeyType="search"
                     />
                     <TouchableOpacity onPress={handleSearch} style={styles.searchButton}>
-                      <Search size={20} color={Colors[colorScheme ?? 'light'].tint} />
+                      <Search size={20} color={Colors[theme].tint} />
                     </TouchableOpacity>
                   </View>
 
@@ -187,14 +187,14 @@ export default function CrossReferenceEditor({
                         >
                           <Text style={[
                             styles.searchResultId,
-                            { color: Colors[colorScheme ?? 'light'].tint }
+                            { color: Colors[theme].tint }
                           ]}>
                             {result.id}
                           </Text>
                           <Text
                             style={[
                               styles.searchResultText,
-                              { color: Colors[colorScheme ?? 'light'].text }
+                              { color: Colors[theme].text }
                             ]}
                             numberOfLines={2}
                           >
@@ -212,7 +212,7 @@ export default function CrossReferenceEditor({
             <View style={styles.sectionContainer}>
               <Text style={[
                 styles.sectionTitle,
-                { color: Colors[colorScheme ?? 'light'].textSecondary }
+                { color: Colors[theme].textSecondary }
               ]}>
                 Note (Optional)
               </Text>
@@ -220,12 +220,12 @@ export default function CrossReferenceEditor({
                 style={[
                   styles.noteInput,
                   { 
-                    color: Colors[colorScheme ?? 'light'].text,
-                    backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
+                    color: Colors[theme].text,
+                    backgroundColor: Colors[theme].cardBackground,
                   }
                 ]}
                 placeholder="Add a note about this connection..."
-                placeholderTextColor={Colors[colorScheme ?? 'light'].textSecondary}
+                placeholderTextColor={Colors[theme].textSecondary}
                 value={note}
                 onChangeText={setNote}
                 multiline
@@ -238,7 +238,7 @@ export default function CrossReferenceEditor({
             <TouchableOpacity
               style={[
                 styles.saveButton,
-                { backgroundColor: Colors[colorScheme ?? 'light'].tint },
+                { backgroundColor: Colors[theme].tint },
                 !targetVerseId && styles.disabledButton
               ]}
               onPress={handleSave}

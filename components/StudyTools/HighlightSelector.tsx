@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { X } from 'lucide-react-native';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { HighlightColor } from '@/types/studyTools';
 
@@ -27,7 +27,7 @@ export default function HighlightSelector({
   onRemoveHighlight,
   hasExistingHighlight,
 }: HighlightSelectorProps) {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   
   const highlightColors: { name: HighlightColor; label: string }[] = [
     { name: 'yellow', label: 'Yellow' },
@@ -47,17 +47,17 @@ export default function HighlightSelector({
       <SafeAreaView style={styles.safeArea}>
         <View style={[
           styles.container,
-          { backgroundColor: Colors[colorScheme ?? 'light'].background }
+          { backgroundColor: Colors[theme].background }
         ]}>
           <View style={styles.header}>
             <Text style={[
               styles.headerTitle,
-              { color: Colors[colorScheme ?? 'light'].text }
+              { color: Colors[theme].text }
             ]}>
               Highlight Verse
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <X size={24} color={Colors[colorScheme ?? 'light'].text} />
+              <X size={24} color={Colors[theme].text} />
             </TouchableOpacity>
           </View>
 
@@ -83,7 +83,7 @@ export default function HighlightSelector({
             <TouchableOpacity
               style={[
                 styles.removeButton,
-                { borderColor: Colors[colorScheme ?? 'light'].error }
+                { borderColor: Colors[theme].error }
               ]}
               onPress={() => {
                 onRemoveHighlight();
@@ -92,7 +92,7 @@ export default function HighlightSelector({
             >
               <Text style={[
                 styles.removeButtonText,
-                { color: Colors[colorScheme ?? 'light'].error }
+                { color: Colors[theme].error }
               ]}>
                 Remove Highlight
               </Text>
