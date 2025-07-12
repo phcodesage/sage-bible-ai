@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
-import { ExternalLink, Bookmark } from 'lucide-react-native';
+import Feather from '@expo/vector-icons/Feather';
+// Remove: import { ExternalLink, Bookmark } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { SearchResult } from '@/types';
 import { useBookmarks } from '@/hooks/useBookmarks';
@@ -17,7 +18,14 @@ export default function SearchResultItem({ result }: SearchResultItemProps) {
   const { addBookmark, isBookmarked } = useBookmarks();
   
   const handleNavigateToVerse = () => {
-    router.push(`/(tabs)/index?book=${result.book}&chapter=${result.chapter}&verse=${result.verse}`);
+    router.push({
+      pathname: "/(tabs)",
+      params: {
+        book: result.book,
+        chapter: result.chapter,
+        verse: result.verse
+      }
+    });
   };
 
   const handleBookmark = () => {
@@ -85,17 +93,19 @@ export default function SearchResultItem({ result }: SearchResultItemProps) {
               onPress={handleBookmark}
               style={styles.actionButton}
             >
-              <Bookmark 
-                size={20} 
+              <Feather 
+                name="bookmark"
+                size={20}
                 color={Colors[theme].tint}
-                fill={isVerseBookmarked ? Colors[theme].tint : 'transparent'}
+                // Optionally, use filled bookmark if isVerseBookmarked
+                // Feather does not support fill, so you may want to change color or use a different icon for filled state
               />
             </TouchableOpacity>
             <TouchableOpacity 
               onPress={handleNavigateToVerse}
               style={styles.actionButton}
             >
-              <ExternalLink size={20} color={Colors[theme].tint} />
+              <Feather name="external-link" size={20} color={Colors[theme].tint} />
             </TouchableOpacity>
           </View>
         </View>

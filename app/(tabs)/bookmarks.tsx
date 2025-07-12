@@ -10,7 +10,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
-import { X, Bookmark, BookmarkX } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
+// Remove: import { X, Bookmark, BookmarkX } from 'lucide-react-native';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import BookmarkItem from '@/components/Bookmarks/BookmarkItem';
@@ -34,7 +35,7 @@ export default function BookmarksScreen() {
     );
   }
 
-  const handleRemoveBookmark = (bookmarkId) => {
+  const handleRemoveBookmark = (bookmarkId: string): void => {
     removeBookmark(bookmarkId);
   };
 
@@ -86,7 +87,7 @@ export default function BookmarksScreen() {
 
       {bookmarks.length === 0 ? (
         <EmptyState 
-          icon={<Bookmark size={60} color={Colors[theme].textSecondary} />}
+          icon={<Feather name="bookmark" size={60} color={Colors[theme].textSecondary} />} 
           title="No bookmarks yet"
           message="Save your favorite verses for quick access later"
         />

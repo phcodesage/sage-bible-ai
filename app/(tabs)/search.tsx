@@ -13,7 +13,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
-import { Search as SearchIcon, X } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
+// Remove: import { Search as SearchIcon, X } from 'lucide-react-native';
 import { useBibleSearch } from '@/hooks/useBibleSearch';
 import SearchResultItem from '@/components/Search/SearchResultItem';
 import SearchHistory from '@/components/Search/SearchHistory';
@@ -52,7 +53,7 @@ export default function SearchScreen() {
     setActiveSearch(false);
   };
 
-  const handleHistoryItemPress = (historyItem) => {
+  const handleHistoryItemPress = (historyItem: string) => {
     setQuery(historyItem);
     performSearch(historyItem);
     setActiveSearch(true);
@@ -81,7 +82,7 @@ export default function SearchScreen() {
               borderColor: activeSearch ? Colors[theme].tint : 'transparent',
             }
           ]}>
-            <SearchIcon size={20} color={Colors[theme].textSecondary} />
+            <Feather name="search" size={20} color={Colors[theme].textSecondary} />
             <TextInput
               style={[styles.searchInput, { color: Colors[theme].text }]}
               placeholder="Search by keyword, verse, or topic..."
@@ -95,7 +96,7 @@ export default function SearchScreen() {
             />
             {query.length > 0 && (
               <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
-                <X size={18} color={Colors[theme].textSecondary} />
+                <Feather name="x" size={18} color={Colors[theme].textSecondary} />
               </TouchableOpacity>
             )}
           </View>

@@ -7,10 +7,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/contexts/ThemeContext';
 import BibleNavigation from '@/components/BibleReader/BibleNavigation';
 import Colors from '@/constants/Colors';
-import { Share, ChevronUp } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
+// Remove: import { Share, ChevronUp } from 'lucide-react-native';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import VerseItem from '@/components/BibleReader/VerseItem';
+import React, { useRef } from "react";
 
 export default function ReadScreen() {
   const [book, setBook] = useState('Genesis');
@@ -19,7 +21,7 @@ export default function ReadScreen() {
   const { bibleContent, loading, error } = useBible(book, chapter);
   const { addBookmark, isBookmarked } = useBookmarks();
   const [scrollToTopVisible, setScrollToTopVisible] = useState(false);
-  
+  const scrollViewRef = useRef<ScrollView>(null);
   const [fontsLoaded] = useFonts({
     'PlayfairDisplay-Regular': PlayfairDisplay_400Regular,
     'PlayfairDisplay-Bold': PlayfairDisplay_700Bold,
@@ -27,12 +29,12 @@ export default function ReadScreen() {
     'Inter-SemiBold': Inter_600SemiBold,
   });
 
-  const onScroll = useCallback(({ nativeEvent }) => {
+  const onScroll = useCallback(({ nativeEvent }: { nativeEvent: { contentOffset: { y: number } } }) => {
     const { contentOffset } = nativeEvent;
     setScrollToTopVisible(contentOffset.y > 200);
   }, []);
 
-  const scrollToTop = useCallback((scrollViewRef) => {
+  const scrollToTop = useCallback((scrollViewRef: React.RefObject<ScrollView | null>) => {
     scrollViewRef?.current?.scrollTo({ y: 0, animated: true });
   }, []);
 
@@ -44,7 +46,7 @@ export default function ReadScreen() {
     );
   }
 
-  const handleChange = (newBook, newChapter) => {
+  const handleChange = (newBook: string, newChapter: number) => {
     setBook(newBook);
     setChapter(newChapter);
   };
@@ -112,8 +114,11 @@ export default function ReadScreen() {
       {scrollToTopVisible && (
         <TouchableOpacity 
           style={[styles.scrollToTop, { backgroundColor: Colors[theme].tint }]} 
-          onPress={() => scrollToTop()}>
-          <ChevronUp color="#FFF" size={24} />
+          onPress={() => {
+            scrollToTop(scrollViewRef);
+          }}
+        >
+          <Feather name="chevron-up" color="#FFF" size={24} />
         </TouchableOpacity>
       )}
     </SafeAreaView>

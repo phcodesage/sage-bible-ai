@@ -9,7 +9,7 @@ import {
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { Note, Annotation, CrossReference } from '@/types/studyTools';
-import { Edit, Trash2, ExternalLink } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 
 interface VerseNotesProps {
   verseId: string;
@@ -97,14 +97,14 @@ export default function VerseNotes({
                     onPress={() => onEditNote(note)}
                     style={styles.actionButton}
                   >
-                    <Edit size={16} color={Colors[theme].tint} />
+                    <Feather name="edit-3" size={16} color={Colors[theme].tint} />
                   </TouchableOpacity>
                   
                   <TouchableOpacity 
                     onPress={() => onDeleteNote(note.id)}
                     style={styles.actionButton}
                   >
-                    <Trash2 size={16} color={Colors[theme].error} />
+                    <Feather name="trash-2" size={16} color={Colors[theme].error} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -151,14 +151,14 @@ export default function VerseNotes({
                     onPress={() => onEditAnnotation(annotation)}
                     style={styles.actionButton}
                   >
-                    <Edit size={16} color={Colors[theme].tint} />
+                    <Feather name="edit-3" size={16} color={Colors[theme].tint} />
                   </TouchableOpacity>
                   
                   <TouchableOpacity 
                     onPress={() => onDeleteAnnotation(annotation.id)}
                     style={styles.actionButton}
                   >
-                    <Trash2 size={16} color={Colors[theme].error} />
+                    <Feather name="trash-2" size={16} color={Colors[theme].error} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -201,7 +201,7 @@ export default function VerseNotes({
                     onPress={() => onNavigateToCrossReference(linkedVerseId)}
                     style={styles.navigateButton}
                   >
-                    <ExternalLink size={16} color={Colors[theme].tint} />
+                    <Feather name="external-link" size={16} color={Colors[theme].tint} />
                   </TouchableOpacity>
                 </View>
                 
@@ -226,7 +226,7 @@ export default function VerseNotes({
                     onPress={() => onDeleteCrossReference(crossRef.id)}
                     style={styles.actionButton}
                   >
-                    <Trash2 size={16} color={Colors[theme].error} />
+                    <Feather name="trash-2" size={16} color={Colors[theme].error} />
                   </TouchableOpacity>
                 </View>
               </View>

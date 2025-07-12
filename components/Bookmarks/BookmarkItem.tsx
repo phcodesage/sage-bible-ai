@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
-import { ExternalLink, Trash } from 'lucide-react-native';
+import Feather from '@expo/vector-icons/Feather';
+// Remove: import { ExternalLink, Trash } from 'lucide-react-native';
 import { router } from 'expo-router';
 import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
 import { Bookmark } from '@/types';
@@ -20,7 +21,14 @@ export default function BookmarkItem({ bookmark, onRemove, isEditing }: Bookmark
     if (isEditing) return;
     
     // Navigate to the specific verse in the Bible reader
-    router.push(`/(tabs)/index?book=${bookmark.book}&chapter=${bookmark.chapter}&verse=${bookmark.verse}`);
+    router.push({
+      pathname: "/(tabs)",
+      params: {
+        book: bookmark.book,
+        chapter: bookmark.chapter,
+        verse: bookmark.verse
+      }
+    });
   };
   
   return (
@@ -50,11 +58,11 @@ export default function BookmarkItem({ bookmark, onRemove, isEditing }: Bookmark
               ]} 
               onPress={() => onRemove(bookmark.id)}
             >
-              <Trash size={16} color="#fff" />
+              <Feather name="trash-2" size={16} color="#fff" />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={handleNavigateToVerse}>
-              <ExternalLink size={18} color={Colors[theme].tint} />
+              <Feather name="external-link" size={18} color={Colors[theme].tint} />
             </TouchableOpacity>
           )}
         </View>

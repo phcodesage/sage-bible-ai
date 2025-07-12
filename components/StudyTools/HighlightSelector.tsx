@@ -7,7 +7,7 @@ import {
   Modal,
   SafeAreaView,
 } from 'react-native';
-import { X } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import { HighlightColor } from '@/types/studyTools';
@@ -57,7 +57,7 @@ export default function HighlightSelector({
               Highlight Verse
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <X size={24} color={Colors[theme].text} />
+              <Feather name="x" size={24} color={Colors[theme].text} />
             </TouchableOpacity>
           </View>
 

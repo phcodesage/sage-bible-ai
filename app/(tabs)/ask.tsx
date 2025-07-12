@@ -13,7 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
-import { Send } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import ChatMessage from '@/components/AI/ChatMessage';
 import { useAI } from '@/hooks/useAI';
@@ -46,7 +46,7 @@ export default function AskScreen() {
 
   const scrollToBottom = () => {
     if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
+      (scrollViewRef.current as ScrollView).scrollToEnd({ animated: true });
     }
   };
 
@@ -156,7 +156,7 @@ export default function AskScreen() {
             onPress={handleSend}
             disabled={message.trim().length === 0 || isLoading}
           >
-            <Send size={20} color="#fff" />
+            <Feather name="send" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

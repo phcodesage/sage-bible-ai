@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
-import { ChevronRight, X } from 'lucide-react-native';
+import Feather from '@expo/vector-icons/Feather';
+// Remove: import { ChevronRight, X } from 'lucide-react-native';
 
 interface Option {
   label: string;
@@ -99,7 +100,7 @@ export default function SettingsItem({
           )}
           
           {(type === 'select' || chevron) && (
-            <ChevronRight size={18} color={Colors[theme].textSecondary} />
+            <Feather name="chevron-right" size={18} color={Colors[theme].textSecondary} />
           )}
         </View>
       </TouchableOpacity>
@@ -120,7 +121,7 @@ export default function SettingsItem({
                 Select {title}
               </Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <X size={24} color={Colors[theme].text} />
+                <Feather name="x" size={24} color={Colors[theme].text} />
               </TouchableOpacity>
             </View>
             

@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
-import { Share as ShareIcon, Bookmark, Copy, X, Pencil, Link, Highlighter, MessageSquare } from 'lucide-react-native';
+import Feather from '@expo/vector-icons/Feather';
+// Remove: import { Share as ShareIcon, Bookmark, Copy, X, Pencil, Link, Highlighter, MessageSquare } from 'lucide-react-native';
 import { useSettings } from '@/hooks/useSettings';
 import { useStudyTools } from '@/hooks/useStudyTools';
 import Animated, { FadeIn } from 'react-native-reanimated';
@@ -176,14 +177,14 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
             }
           ]}>
             {verse.text} {isBookmarked && (
-              <Bookmark 
+              <Feather name="bookmark"
                 size={16} 
                 color={Colors[theme].tint} 
                 fill={Colors[theme].tint}
               />
             )}
             {notes.length > 0 && (
-              <MessageSquare 
+              <Feather name="message-square"
                 size={16} 
                 color={Colors[theme].tint} 
               />
@@ -215,7 +216,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                 {book} {chapter}:{verse.number}
               </Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <X size={20} color={Colors[theme].text} />
+                <Feather name="x" size={20} color={Colors[theme].text} />
               </TouchableOpacity>
             </View>
             
@@ -232,7 +233,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleShareVerse}
                 >
-                  <ShareIcon size={22} color={Colors[theme].tint} />
+                  <Feather name="share" size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
                     { color: Colors[theme].text }
@@ -245,7 +246,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleCopyVerse}
                 >
-                  <Copy size={22} color={Colors[theme].tint} />
+                  <Feather name="copy" size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
                     { color: Colors[theme].text }
@@ -258,7 +259,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleBookmarkVerse}
                 >
-                  <Bookmark 
+                  <Feather name="bookmark" 
                     size={22} 
                     color={Colors[theme].tint}
                     fill={isBookmarked ? Colors[theme].tint : 'transparent'} 
@@ -275,7 +276,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleAddNote}
                 >
-                  <Pencil size={22} color={Colors[theme].tint} />
+                  <Feather name="edit-3" size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
                     { color: Colors[theme].text }
@@ -283,12 +284,11 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                     Add Note
                   </Text>
                 </TouchableOpacity>
-                
                 <TouchableOpacity 
                   style={styles.actionButton} 
                   onPress={handleHighlight}
                 >
-                  <Highlighter size={22} color={Colors[theme].tint} />
+                  <Feather name="star" size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
                     { color: Colors[theme].text }
@@ -301,7 +301,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                   style={styles.actionButton} 
                   onPress={handleAddCrossReference}
                 >
-                  <Link size={22} color={Colors[theme].tint} />
+                  <Feather name="link" size={22} color={Colors[theme].tint} />
                   <Text style={[
                     styles.actionText, 
                     { color: Colors[theme].text }
@@ -315,7 +315,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
                     style={styles.actionButton} 
                     onPress={handleViewNotes}
                   >
-                    <MessageSquare size={22} color={Colors[theme].tint} />
+                    <Feather name="message-square" size={22} color={Colors[theme].tint} />
                     <Text style={[
                       styles.actionText, 
                       { color: Colors[theme].text }
@@ -375,7 +375,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
               Notes for {verseId}
             </Text>
             <TouchableOpacity onPress={() => setNotesVisible(false)} style={styles.closeButton}>
-              <X size={24} color={Colors[theme].text} />
+              <Feather name="x" size={24} color={Colors[theme].text} />
             </TouchableOpacity>
           </View>
           

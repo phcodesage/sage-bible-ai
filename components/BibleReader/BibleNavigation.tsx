@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
-import { ChevronDown, ChevronLeft, ChevronRight, X } from 'lucide-react-native';
+import Feather from '@expo/vector-icons/Feather';
+// Remove: import { ChevronDown, ChevronLeft, ChevronRight, X } from 'lucide-react-native';
 import { bibleBooks } from '@/constants/BibleData';
 
 interface BibleNavigationProps {
@@ -74,7 +75,7 @@ export default function BibleNavigation({
         style={[styles.navButton, styles.previousButton]} 
         onPress={goToPreviousChapter}
       >
-        <ChevronLeft size={22} color={Colors[theme].text} />
+        <Feather name="chevron-left" size={22} color={Colors[theme].text} />
       </TouchableOpacity>
       
       <TouchableOpacity 
@@ -84,17 +85,15 @@ export default function BibleNavigation({
         ]} 
         onPress={openSelectionModal}
       >
-        <Text style={[styles.selectionText, { color: Colors[theme].text }]}>
-          {currentBook} {currentChapter}
-        </Text>
-        <ChevronDown size={18} color={Colors[theme].text} />
+        <Text style={[styles.selectionText, { color: Colors[theme].text }]}> {currentBook} {currentChapter} </Text>
+        <Feather name="chevron-down" size={18} color={Colors[theme].text} />
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={[styles.navButton, styles.nextButton]} 
         onPress={goToNextChapter}
       >
-        <ChevronRight size={22} color={Colors[theme].text} />
+        <Feather name="chevron-right" size={22} color={Colors[theme].text} />
       </TouchableOpacity>
       
       <Modal
@@ -116,7 +115,7 @@ export default function BibleNavigation({
                 style={styles.closeButton} 
                 onPress={() => setModalVisible(false)}
               >
-                <X size={24} color={Colors[theme].text} />
+                <Feather name="x" size={24} color={Colors[theme].text} />
               </TouchableOpacity>
             </View>
             

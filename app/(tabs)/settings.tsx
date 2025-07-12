@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { 
   View, 
   Text, 
@@ -11,22 +11,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '@/constants/Colors';
-import { 
-  ChevronRight, 
-  Sun, 
-  Moon, 
-  BookOpen, 
-  Share as ShareIcon, 
-  Info, 
-  FileText, 
-  Heart,
-  Settings as SettingsIcon,
-} from 'lucide-react-native';
 import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import { useSettings } from '@/hooks/useSettings';
 import { useTheme } from '@/contexts/ThemeContext';
 import SettingsItem from '@/components/Settings/SettingsItem';
 import SettingsSection from '@/components/Settings/SettingsSection';
+import { Feather } from '@expo/vector-icons';
 
 export default function SettingsScreen() {
   // We're using _useColorScheme because we already defined useColorScheme in the settings hook
@@ -50,8 +40,11 @@ export default function SettingsScreen() {
 
   if (!fontsLoaded) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
-        <ActivityIndicator size="large" color={Colors[theme].tint} />
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}> 
+        <ActivityIndicator 
+          size="large" 
+          color={Colors[theme].tint} 
+        />
       </View>
     );
   }
@@ -77,14 +70,14 @@ export default function SettingsScreen() {
       <ScrollView style={styles.scrollView}>
         <SettingsSection title="Appearance">
           <SettingsItem
-            icon={isDarkMode ? <Moon size={22} color={Colors[theme].textSecondary} /> : <Sun size={22} color={Colors[theme].textSecondary} />}
+            icon={isDarkMode ? <Feather name="moon" size={22} color={Colors[theme].textSecondary} /> : <Feather name="sun" size={22} color={Colors[theme].textSecondary} />}
             title="Dark Mode"
             type="switch"
             value={isDarkMode}
             onValueChange={handleDarkModeToggle}
           />
           <SettingsItem
-            icon={<FileText size={22} color={Colors[theme].textSecondary} />}
+            icon={<Feather name="file-text" size={22} color={Colors[theme].textSecondary} />}
             title="Text Only Mode"
             description="Hide verse numbers and chapter headings"
             type="switch"
@@ -92,7 +85,7 @@ export default function SettingsScreen() {
             onValueChange={handleTextOnlyToggle}
           />
           <SettingsItem
-            icon={<BookOpen size={22} color={Colors[theme].textSecondary} />}
+            icon={<Feather name="book-open" size={22} color={Colors[theme].textSecondary} />}
             title="Font Size"
             description={`${fontSize === 'small' ? 'Small' : fontSize === 'medium' ? 'Medium' : 'Large'}`}
             type="select"
@@ -108,7 +101,7 @@ export default function SettingsScreen() {
 
         <SettingsSection title="Bible">
           <SettingsItem
-            icon={<BookOpen size={22} color={Colors[theme].textSecondary} />}
+            icon={<Feather name="book-open" size={22} color={Colors[theme].textSecondary} />}
             title="Translation"
             description={`${translation === 'kjv' ? 'King James Version' : 
               translation === 'niv' ? 'New International Version' : 'English Standard Version'}`}
@@ -125,19 +118,19 @@ export default function SettingsScreen() {
 
         <SettingsSection title="About">
           <SettingsItem
-            icon={<Info size={22} color={Colors[theme].textSecondary} />}
+            icon={<Feather name="info" size={22} color={Colors[theme].textSecondary} />}
             title="About Sage Bible"
             chevron
             onPress={() => {}}
           />
           <SettingsItem
-            icon={<ShareIcon size={22} color={Colors[theme].textSecondary} />}
+            icon={<Feather name="share" size={22} color={Colors[theme].textSecondary} />}
             title="Share App"
             chevron
             onPress={() => {}}
           />
           <SettingsItem
-            icon={<Heart size={22} color={Colors[theme].textSecondary} />}
+            icon={<Feather name="heart" size={22} color={Colors[theme].textSecondary} />}
             title="Rate App"
             chevron
             onPress={() => {}}

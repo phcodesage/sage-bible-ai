@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
-import { Clock, Trash2 } from 'lucide-react-native';
+import Feather from '@expo/vector-icons/Feather';
+// Remove: import { Clock, Trash2 } from 'lucide-react-native';
 import { useBibleSearch } from '@/hooks/useBibleSearch';
 
 interface SearchHistoryProps {
@@ -17,7 +18,7 @@ export default function SearchHistory({ history, onPress }: SearchHistoryProps) 
   if (history.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Clock size={50} color={Colors[theme].textSecondary} />
+        <Feather name="clock" size={50} color={Colors[theme].textSecondary} />
         <Text style={[styles.emptyText, { color: Colors[theme].textSecondary }]}>
           No recent searches
         </Text>
@@ -52,14 +53,14 @@ export default function SearchHistory({ history, onPress }: SearchHistoryProps) 
               style={styles.historyContent}
               onPress={() => onPress(item)}
             >
-              <Clock size={16} color={Colors[theme].textSecondary} />
+              <Feather name="clock" size={16} color={Colors[theme].textSecondary} />
               <Text style={[styles.historyText, { color: Colors[theme].text }]}>
                 {item}
               </Text>
             </TouchableOpacity>
             
             <TouchableOpacity onPress={() => removeFromHistory(item)}>
-              <Trash2 size={18} color={Colors[theme].textSecondary} />
+              <Feather name="trash-2" size={18} color={Colors[theme].textSecondary} />
             </TouchableOpacity>
           </View>
         )}

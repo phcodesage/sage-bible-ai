@@ -10,7 +10,8 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { X, Save, Search } from 'lucide-react-native';
+import Feather from '@expo/vector-icons/Feather';
+// Remove: import { X, Save, Search } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 
@@ -90,7 +91,7 @@ export default function CrossReferenceEditor({
               Add Cross Reference
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <X size={24} color={Colors[theme].text} />
+              <Feather name="x" size={24} color={Colors[theme].text} />
             </TouchableOpacity>
           </View>
 
@@ -170,7 +171,7 @@ export default function CrossReferenceEditor({
                       returnKeyType="search"
                     />
                     <TouchableOpacity onPress={handleSearch} style={styles.searchButton}>
-                      <Search size={20} color={Colors[theme].tint} />
+                      <Feather name="search" size={20} color={Colors[theme].tint} />
                     </TouchableOpacity>
                   </View>
 
@@ -244,7 +245,7 @@ export default function CrossReferenceEditor({
               onPress={handleSave}
               disabled={!targetVerseId}
             >
-              <Save size={20} color="#FFFFFF" style={styles.saveIcon} />
+              <Feather name="save" size={20} color="#FFFFFF" style={styles.saveIcon} />
               <Text style={styles.saveButtonText}>Save Cross Reference</Text>
             </TouchableOpacity>
           </View>

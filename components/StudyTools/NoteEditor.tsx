@@ -10,7 +10,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { X, Save } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 
@@ -72,7 +72,7 @@ export default function NoteEditor({
               {isEditing ? 'Edit Note' : 'Add Note'}
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <X size={24} color={Colors[theme].text} />
+              <Feather name="x" size={24} color={Colors[theme].text} />
             </TouchableOpacity>
           </View>
 
@@ -120,7 +120,7 @@ export default function NoteEditor({
               onPress={handleSave}
               disabled={!content.trim()}
             >
-              <Save size={20} color="#FFFFFF" style={styles.saveIcon} />
+              <Feather name="save" size={20} color="#FFFFFF" style={styles.saveIcon} />
               <Text style={styles.saveButtonText}>Save Note</Text>
             </TouchableOpacity>
           </View>

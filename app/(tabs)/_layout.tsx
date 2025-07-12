@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router';
 import { useColorScheme } from 'react-native';
-import { Book, Search, MessageSquareText, Bookmark, Settings } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
+// Remove: import { Book, Search, MessageSquareText, Bookmark, Settings } from 'lucide-react-native';
 import Colors from '@/constants/Colors';
 
 export default function TabLayout() {
@@ -24,35 +25,35 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Read',
-          tabBarIcon: ({ color, size }) => <Book color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Feather name="book" color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
           title: 'Search',
-          tabBarIcon: ({ color, size }) => <Search color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Feather name="search" color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="ask"
         options={{
           title: 'Ask AI',
-          tabBarIcon: ({ color, size }) => <MessageSquareText color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Feather name="message-square" color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="bookmarks"
         options={{
           title: 'Bookmarks',
-          tabBarIcon: ({ color, size }) => <Bookmark color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Feather name="bookmark" color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',
-          tabBarIcon: ({ color, size }) => <Settings color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Feather name="settings" color={color} size={size} />,
         }}
       />
     </Tabs>
