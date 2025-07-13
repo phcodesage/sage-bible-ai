@@ -20,6 +20,9 @@ import HighlightSelector from '@/components/StudyTools/HighlightSelector';
 import CrossReferenceEditor from '@/components/StudyTools/CrossReferenceEditor';
 import VerseNotes from '@/components/StudyTools/VerseNotes';
 import { HighlightColor } from '@/types/studyTools';
+import { Share } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
+import { useNotification } from '@/contexts/NotificationContext';
 
 interface VerseProps {
   verse: {
@@ -40,7 +43,7 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
   const [crossRefEditorVisible, setCrossRefEditorVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
-  
+  const { showNotification } = useNotification();
   const { theme } = useTheme();
   const { fontSize, textOnly } = useSettings();
   const { 
@@ -127,21 +130,27 @@ export default function VerseItem({ verse, book, chapter, isBookmarked, onBookma
     }
   };
   
-  const handleShareVerse = () => {
+  const handleShareVerse = async () => {
     setModalVisible(false);
-    // Share functionality would be here
-    Alert.alert('Shared', `${book} ${chapter}:${verse.number} has been shared.`);
+    try {
+      await Share.share({
+        message: `${book} ${chapter}:${verse.number} — ${verse.text}`,
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Could not share the verse.');
+    }
   };
   
-  const handleCopyVerse = () => {
+  const handleCopyVerse = async () => {
     setModalVisible(false);
-    // Copy functionality would be here
-    Alert.alert('Copied', `${book} ${chapter}:${verse.number} has been copied to clipboard.`);
+    await Clipboard.setStringAsync(`${book} ${chapter}:${verse.number} — ${verse.text}`);
+    Alert.alert('Copied', 'Verse copied to clipboard.');
   };
   
   const handleBookmarkVerse = () => {
     setModalVisible(false);
     onBookmark();
+    showNotification(isBookmarked ? 'Bookmark removed' : 'Bookmark added!');
   };
   
   const getFontSize = () => {

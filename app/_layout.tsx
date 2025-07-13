@@ -9,6 +9,8 @@ import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-font
 import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold } from '@expo-google-fonts/playfair-display';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { SettingsProvider } from '@/contexts/SettingsContext';
+import { BookmarksProvider } from '@/contexts/BookmarksContext';
+import { NotificationProvider } from '@/contexts/NotificationContext';
 
 // Prevent splash screen from auto-hiding before fonts are loaded
 SplashScreen.preventAutoHideAsync();
@@ -39,7 +41,11 @@ export default function RootLayout() {
   return (
     <SettingsProvider>
       <ThemeProvider>
-        <ThemedApp />
+        <BookmarksProvider>
+          <NotificationProvider>
+            <ThemedApp />
+          </NotificationProvider>
+        </BookmarksProvider>
       </ThemeProvider>
     </SettingsProvider>
   );

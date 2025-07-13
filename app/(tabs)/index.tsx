@@ -8,11 +8,14 @@ import { useTheme } from '@/contexts/ThemeContext';
 import BibleNavigation from '@/components/BibleReader/BibleNavigation';
 import Colors from '@/constants/Colors';
 import { Feather } from '@expo/vector-icons';
+import { Share } from 'react-native';
 // Remove: import { Share, ChevronUp } from 'lucide-react-native';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import VerseItem from '@/components/BibleReader/VerseItem';
 import React, { useRef } from "react";
+import { useLocalSearchParams } from 'expo-router';
+import { useEffect } from 'react';
 
 export default function ReadScreen() {
   const [book, setBook] = useState('Genesis');
@@ -124,6 +127,19 @@ export default function ReadScreen() {
       )}
     </SafeAreaView>
   );
+
+  const handleShare = async () => {
+    try {
+      const versesText = bibleContent?.verses?.map(v => `${v.number}. ${v.text}`).join('\n') || '';
+      const message = `${book} ${chapter}\n\n${versesText}`;
+      await Share.share({
+        message,
+        title: `${book} ${chapter}`,
+      });
+    } catch (error) {
+      // Optionally handle error
+    }
+  };
 }
 
 const styles = StyleSheet.create({

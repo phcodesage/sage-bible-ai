@@ -19,10 +19,8 @@ export default function BookmarkItem({ bookmark, onRemove, isEditing }: Bookmark
   
   const handleNavigateToVerse = () => {
     if (isEditing) return;
-    
-    // Navigate to the specific verse in the Bible reader
-    router.push({
-      pathname: "/(tabs)",
+    router.replace({
+      pathname: "/",
       params: {
         book: bookmark.book,
         chapter: bookmark.chapter,

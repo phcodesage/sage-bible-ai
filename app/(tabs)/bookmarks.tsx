@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { 
   View, 
   Text, 
@@ -16,12 +16,23 @@ import { useBookmarks } from '@/hooks/useBookmarks';
 import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import BookmarkItem from '@/components/Bookmarks/BookmarkItem';
 import EmptyState from '@/components/UI/EmptyState';
+import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const BADGE_KEY = 'bookmarks_badge_count';
 
 export default function BookmarksScreen() {
   const { theme } = useTheme();
   const { bookmarks, removeBookmark, clearAllBookmarks } = useBookmarks();
   const [isEditing, setIsEditing] = useState(false);
   
+  useFocusEffect(
+    useCallback(() => {
+      AsyncStorage.setItem(BADGE_KEY, '0');
+      // If you have a setBadgeCount in context, also call setBadgeCount(0)
+    }, [])
+  );
+
   const [fontsLoaded] = useFonts({
     'Inter-Regular': Inter_400Regular,
     'Inter-SemiBold': Inter_600SemiBold,
@@ -29,7 +40,7 @@ export default function BookmarksScreen() {
 
   if (!fontsLoaded) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}> 
         <ActivityIndicator size="large" color={Colors[theme].tint} />
       </View>
     );
