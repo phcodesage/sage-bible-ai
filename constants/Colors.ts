@@ -35,7 +35,7 @@ export default {
     error: '#F87171',
     success: '#34D399',
     warning: '#FBBF24',
-    highlight: '#8B6E0C',
+    highlight: '#ffe066', // Brighter yellow for dark mode
     highlightLight: '#333',
     searchBarBackground: '#2A2A2A',
     switchTrack: Platform.select({ ios: undefined, default: '#555' }),

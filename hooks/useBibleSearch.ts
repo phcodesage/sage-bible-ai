@@ -25,48 +25,52 @@ export function useBibleSearch() {
 
   const performSearch = useCallback(async (query: string) => {
     if (!query.trim()) return;
-
     setLoading(true);
     setError(null);
-
     try {
-      // API endpoint for Bible search
-      const apiUrl = `https://api.scripture.api.bible/v1/bibles/${translation}/search?query=${encodeURIComponent(query)}`;
-      
-      const response = await fetch(apiUrl, {
-        headers: {
-          'api-key': process.env.EXPO_PUBLIC_BIBLE_API_KEY || '',
-        },
+      type KJVData = {
+        books: Array<{
+          name: string;
+          chapters: Array<{
+            chapter: number;
+            verses: Array<{ verse: number; text: string }>;
+          }>;
+        }>;
+      };
+      const kjvData = await import('@/assets/bible-data/KJV.json');
+      const books = (kjvData as any).default ? (kjvData as any).default.books : (kjvData as any).books;
+      const lowerQuery = query.toLowerCase();
+      const localResults: SearchResult[] = [];
+      books.forEach((book: any) => {
+        book.chapters.forEach((chapter: any) => {
+          chapter.verses.forEach((verse: any) => {
+            if (verse.text.toLowerCase().includes(lowerQuery)) {
+              localResults.push({
+                id: `${book.name}-${chapter.chapter}-${verse.verse}`,
+                book: book.name,
+                chapter: chapter.chapter,
+                verse: verse.verse,
+                text: verse.text,
+                searchTerm: query
+              });
+            }
+          });
+        });
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch search results');
-      }
-
-      const data = await response.json();
-      
-      // Transform API response to our SearchResult format
-      const searchResults: SearchResult[] = data.data.verses.map((verse: any) => ({
-        id: verse.id,
-        book: verse.reference.split(' ')[0],
-        chapter: parseInt(verse.reference.split(':')[0].split(' ')[1]),
-        verse: parseInt(verse.reference.split(':')[1]),
-        text: verse.text,
-        searchTerm: query
-      }));
-
-      if (searchResults.length === 0) {
+      if (localResults.length === 0) {
         setError('No verses found matching your search. Try different words or check your spelling.');
+        setResults([]);
       } else {
-        setResults(searchResults);
+        setResults(localResults);
       }
     } catch (err) {
       console.error('Error searching Bible:', err);
       setError('An error occurred while searching. Please try again.');
+      setResults([]);
     } finally {
       setLoading(false);
     }
-  }, [translation]);
+  }, []);
 
   const addToHistory = useCallback((query: string) => {
     if (!query.trim()) return;

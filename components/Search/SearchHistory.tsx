@@ -9,11 +9,12 @@ import { useBibleSearch } from '@/hooks/useBibleSearch';
 interface SearchHistoryProps {
   history: string[];
   onPress: (query: string) => void;
+  removeFromHistory: (query: string) => void;
+  clearHistory: () => void;
 }
 
-export default function SearchHistory({ history, onPress }: SearchHistoryProps) {
+export default function SearchHistory({ history, onPress, removeFromHistory, clearHistory }: SearchHistoryProps) {
   const { theme } = useTheme();
-  const { removeFromHistory, clearHistory } = useBibleSearch();
   
   if (history.length === 0) {
     return (

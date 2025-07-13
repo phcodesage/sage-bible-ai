@@ -37,8 +37,17 @@ export function useBible(book: string, chapter: number) {
       setLoading(true);
       setError(null);
       try {
-        const kjvData = (await import('../assets/bible-data/KJV.json')).default as KJVData;
-        const bookData = kjvData.books.find(b => b.name === book);
+        let bibleData: KJVData;
+        if (translation === 'kjv') {
+          bibleData = (await import('../assets/bible-data/KJV.json')).default as KJVData;
+        } else if (translation === 'akjv') {
+          bibleData = (await import('../assets/bible-data/AKJV.json')).default as KJVData;
+        } else if (translation === 'ceb') {
+          bibleData = (await import('../assets/bible-data/CebPinadayag.json')).default as KJVData;
+        } else {
+          bibleData = (await import('../assets/bible-data/KJV.json')).default as KJVData;
+        }
+        const bookData = bibleData.books.find(b => b.name === book);
         if (!bookData) throw new Error('Book not found');
         const chapterData = bookData.chapters.find(c => c.chapter === chapter);
         if (!chapterData) throw new Error('Chapter not found');

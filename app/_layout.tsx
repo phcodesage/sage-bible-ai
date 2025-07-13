@@ -49,7 +49,7 @@ function ThemedApp() {
   const { theme } = useTheme();
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }} edges={["bottom", "left", "right"]}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme === 'dark' ? '#000' : '#fff' }} edges={["bottom", "left", "right"]}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" options={{ title: 'Not Found' }} />

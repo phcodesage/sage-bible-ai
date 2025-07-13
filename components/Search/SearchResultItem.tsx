@@ -33,38 +33,18 @@ export default function SearchResultItem({ result }: SearchResultItemProps) {
   };
   
   const highlightSearchTerms = (text: string, searchTerm: string) => {
-    if (!searchTerm) return text;
-    
-    // Split the search term into individual words
-    const words = searchTerm.toLowerCase().split(' ');
-    
-    // Create a regex pattern that matches whole words only
-    const pattern = new RegExp(`\\b(${words.join('|')})\\b`, 'gi');
-    
-    // Split the text into parts using the pattern
+    if (!searchTerm) return <Text style={[styles.text, { color: Colors[theme].text }]}>{text}</Text>;
+    const pattern = new RegExp(`(${searchTerm})`, 'gi');
     const parts = text.split(pattern);
-    
     return (
-      <Text style={[styles.text, { color: Colors[theme].text }]}>
-        {parts.map((part, index) => {
-          const isMatch = words.some(word => 
-            part.toLowerCase() === word.toLowerCase()
-          );
-          
-          return isMatch ? (
-            <Text 
-              key={index} 
-              style={[
-                styles.highlight,
-                { backgroundColor: Colors[theme].highlight }
-              ]}
-            >
-              {part}
-            </Text>
+      <Text style={[styles.text, { color: Colors[theme].text }]}> 
+        {parts.map((part, index) =>
+          pattern.test(part) ? (
+            <Text key={index} style={[styles.highlight, { backgroundColor: Colors[theme].highlight, color: '#000' }]}>{part}</Text>
           ) : (
             <Text key={index}>{part}</Text>
-          );
-        })}
+          )
+        )}
       </Text>
     );
   };
@@ -160,6 +140,7 @@ const styles = StyleSheet.create({
   highlight: {
     borderRadius: 2,
     paddingHorizontal: 2,
+    backgroundColor: '#fff59d', // Soft yellow
   },
   actions: {
     flexDirection: 'row',

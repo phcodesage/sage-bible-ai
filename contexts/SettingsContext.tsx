@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 type ColorScheme = 'light' | 'dark';
-type BibleTranslation = 'kjv' | 'niv' | 'esv';
+type BibleTranslation = 'kjv' | 'akjv' | 'ceb';
 type FontSize = 'small' | 'medium' | 'large';
 
 interface SettingsContextType {

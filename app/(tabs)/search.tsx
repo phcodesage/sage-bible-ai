@@ -24,7 +24,17 @@ export default function SearchScreen() {
   const [query, setQuery] = useState('');
   const [activeSearch, setActiveSearch] = useState(false);
   const { theme } = useTheme();
-  const { results, loading, error, performSearch, searchHistory, addToHistory, clearInput } = useBibleSearch();
+  const {
+    results,
+    loading,
+    error,
+    performSearch,
+    searchHistory,
+    addToHistory,
+    clearInput,
+    removeFromHistory,
+    clearHistory,
+  } = useBibleSearch();
 
   const [fontsLoaded] = useFonts({
     'Inter-Regular': Inter_400Regular,
@@ -60,7 +70,7 @@ export default function SearchScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: Colors[theme].background }]}> 
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoidingView}
@@ -133,7 +143,14 @@ export default function SearchScreen() {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-          !activeSearch && <SearchHistory history={searchHistory} onPress={handleHistoryItemPress} />
+          !activeSearch && (
+            <SearchHistory
+              history={searchHistory}
+              onPress={handleHistoryItemPress}
+              removeFromHistory={removeFromHistory}
+              clearHistory={clearHistory}
+            />
+          )
         )}
       </KeyboardAvoidingView>
     </SafeAreaView>

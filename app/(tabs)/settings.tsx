@@ -37,7 +37,7 @@ export default function SettingsScreen() {
   });
 
   const handleSetFontSize = (value: string) => setFontSize(value as 'small' | 'medium' | 'large');
-  const handleSetTranslation = (value: string) => setTranslation(value as 'kjv' | 'niv' | 'esv');
+  const handleSetTranslation = (value: string) => setTranslation(value as 'kjv' | 'akjv' | 'ceb');
 
   if (!fontsLoaded) {
     return (
@@ -104,14 +104,18 @@ export default function SettingsScreen() {
           <SettingsItem
             icon={<Feather name="book-open" size={22} color={Colors[theme].textSecondary} />}
             title="Translation"
-            description={`${translation === 'kjv' ? 'King James Version' : 
-              translation === 'niv' ? 'New International Version' : 'English Standard Version'}`}
+            description={
+              translation === 'kjv' ? 'King James Version' :
+              translation === 'akjv' ? 'American King James Version' :
+              translation === 'ceb' ? 'Pinadayag Cebuano' :
+              ''
+            }
             type="select"
             value={translation}
             options={[
               { label: 'King James Version (KJV)', value: 'kjv' },
-              { label: 'New International Version (NIV)', value: 'niv' },
-              { label: 'English Standard Version (ESV)', value: 'esv' },
+              { label: 'American King James Version (AKJV)', value: 'akjv' },
+              { label: 'Pinadayag Cebuano', value: 'ceb' },
             ]}
             onSelect={handleSetTranslation}
           />
