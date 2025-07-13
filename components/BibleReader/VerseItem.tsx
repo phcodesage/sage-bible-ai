@@ -12,7 +12,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import Colors from '@/constants/Colors';
 import Feather from '@expo/vector-icons/Feather';
 // Remove: import { Share as ShareIcon, Bookmark, Copy, X, Pencil, Link, Highlighter, MessageSquare } from 'lucide-react-native';
-import { useSettings } from '@/hooks/useSettings';
+import { useSettings } from '@/contexts/SettingsContext';
 import { useStudyTools } from '@/hooks/useStudyTools';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import NoteEditor from '@/components/StudyTools/NoteEditor';

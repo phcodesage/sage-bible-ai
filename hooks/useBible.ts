@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSettings } from './useSettings';
+import { useSettings } from '@/contexts/SettingsContext';
 
 interface BibleContent {
   book: string;

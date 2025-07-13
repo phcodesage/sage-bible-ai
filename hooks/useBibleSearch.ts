@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSettings } from './useSettings';
+import { useSettings } from '@/contexts/SettingsContext';
 import { SearchResult } from '@/types';
 
 export function useBibleSearch() {

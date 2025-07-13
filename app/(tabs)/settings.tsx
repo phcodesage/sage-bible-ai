@@ -12,7 +12,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '@/constants/Colors';
 import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
-import { useSettings } from '@/hooks/useSettings';
+// Change this:
+import { useSettings } from '@/contexts/SettingsContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import SettingsItem from '@/components/Settings/SettingsItem';
 import SettingsSection from '@/components/Settings/SettingsSection';

@@ -8,6 +8,7 @@ import { SplashScreen } from 'expo-router';
 import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold } from '@expo-google-fonts/playfair-display';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { SettingsProvider } from '@/contexts/SettingsContext';
 
 // Prevent splash screen from auto-hiding before fonts are loaded
 SplashScreen.preventAutoHideAsync();
@@ -36,9 +37,11 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider>
-      <ThemedApp />
-    </ThemeProvider>
+    <SettingsProvider>
+      <ThemeProvider>
+        <ThemedApp />
+      </ThemeProvider>
+    </SettingsProvider>
   );
 }
 
