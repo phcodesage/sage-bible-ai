@@ -83,6 +83,7 @@ export default function ReadScreen() {
       </View>
       
       <ScrollView 
+        ref={scrollViewRef} // <-- Add this line
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
