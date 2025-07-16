@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type ColorScheme = 'light' | 'dark';
 type BibleTranslation = 'kjv' | 'akjv' | 'ceb';
@@ -22,8 +23,30 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [translation, setTranslation] = useState<BibleTranslation>('kjv');
   const [fontSize, setFontSize] = useState<FontSize>('medium');
   const [textOnly, setTextOnly] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Optionally: load/save from AsyncStorage here
+  useEffect(() => {
+    AsyncStorage.multiGet([
+      'colorScheme',
+      'translation',
+      'fontSize',
+      'textOnly',
+    ]).then(results => {
+      results.forEach(([key, value]) => {
+        if (value !== null) {
+          switch (key) {
+            case 'colorScheme': setColorScheme(value as ColorScheme); break;
+            case 'translation': setTranslation(value as BibleTranslation); break;
+            case 'fontSize': setFontSize(value as FontSize); break;
+            case 'textOnly': setTextOnly(value === 'true'); break;
+          }
+        }
+      });
+      setIsLoaded(true);
+    });
+  }, []);
+
+  if (!isLoaded) return null; // Or a loading spinner
 
   return (
     <SettingsContext.Provider value={{ colorScheme, setColorScheme, translation, setTranslation, fontSize, setFontSize, textOnly, setTextOnly }}>
