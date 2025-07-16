@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useFonts, PlayfairDisplay_400Regular, PlayfairDisplay_700Bold } from '@expo-google-fonts/playfair-display';
 import { Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
@@ -8,19 +8,16 @@ import { useTheme } from '@/contexts/ThemeContext';
 import BibleNavigation from '@/components/BibleReader/BibleNavigation';
 import Colors from '@/constants/Colors';
 import { Feather } from '@expo/vector-icons';
-import { Share } from 'react-native';
-// Remove: import { Share, ChevronUp } from 'lucide-react-native';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import VerseItem from '@/components/BibleReader/VerseItem';
-import React, { useRef } from "react";
-import { useLocalSearchParams } from 'expo-router';
-import { useEffect } from 'react';
+import { bibleBooks } from '@/constants/BibleData';
 
 export default function ReadScreen() {
-  const [book, setBook] = useState('Genesis');
+  const [bookIndex, setBookIndex] = useState(0); // 0 = Genesis
   const [chapter, setChapter] = useState(1);
   const { theme } = useTheme();
+  const book = bibleBooks[bookIndex].name;
   const { bibleContent, loading, error } = useBible(book, chapter);
   const { addBookmark, isBookmarked } = useBookmarks();
   const [scrollToTopVisible, setScrollToTopVisible] = useState(false);
@@ -43,20 +40,20 @@ export default function ReadScreen() {
 
   if (!fontsLoaded) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}> 
         <ActivityIndicator size="large" color={Colors[theme].tint} />
       </View>
     );
   }
 
-  const handleChange = (newBook: string, newChapter: number) => {
-    setBook(newBook);
+  const handleChange = (newBookIndex: number, newChapter: number) => {
+    setBookIndex(newBookIndex);
     setChapter(newChapter);
   };
 
   if (loading) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}> 
         <ActivityIndicator size="large" color={Colors[theme].tint} />
       </View>
     );
@@ -64,8 +61,8 @@ export default function ReadScreen() {
 
   if (error) {
     return (
-      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}>
-        <Text style={[styles.errorText, { color: Colors[theme].error }]}>
+      <View style={[styles.container, { backgroundColor: Colors[theme].background }]}> 
+        <Text style={[styles.errorText, { color: Colors[theme].error }]}> 
           Error loading Bible content. Please try again.
         </Text>
       </View>
@@ -73,30 +70,28 @@ export default function ReadScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: Colors[theme].background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: Colors[theme].background }]}> 
       <View style={styles.headerContainer}>
-        <Text style={[styles.headerTitle, { color: Colors[theme].text }]}>
-          {book} {chapter}
-        </Text>
-        <BibleNavigation 
-          currentBook={book} 
-          currentChapter={chapter} 
-          onChangeSelection={handleChange} 
+
+        <BibleNavigation
+          currentBook={bookIndex}
+          currentChapter={chapter - 1} // Pass 0-based index
+          verseCount={bibleContent?.verses.length || 1}
+          onChangeSelection={(b, c, v) => {
+            setBookIndex(b);
+            setChapter(c + 1); // Convert back to 1-based
+            // handle verse selection (e.g., scroll to verse)
+          }}
         />
       </View>
-      
       <ScrollView 
-        ref={scrollViewRef} // <-- Add this line
+        ref={scrollViewRef}
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
         onScroll={onScroll}
         scrollEventThrottle={16}
       >
-        <Text style={[styles.chapterTitle, { color: Colors[theme].text }]}>
-          Chapter {chapter}
-        </Text>
-        
         <View style={styles.versesContainer}>
           {bibleContent?.verses?.map((verse) => (
             <Animated.View 
@@ -114,7 +109,6 @@ export default function ReadScreen() {
           ))}
         </View>
       </ScrollView>
-      
       {scrollToTopVisible && (
         <TouchableOpacity 
           style={[styles.scrollToTop, { backgroundColor: Colors[theme].tint }]} 
@@ -128,18 +122,8 @@ export default function ReadScreen() {
     </SafeAreaView>
   );
 
-  const handleShare = async () => {
-    try {
-      const versesText = bibleContent?.verses?.map(v => `${v.number}. ${v.text}`).join('\n') || '';
-      const message = `${book} ${chapter}\n\n${versesText}`;
-      await Share.share({
-        message,
-        title: `${book} ${chapter}`,
-      });
-    } catch (error) {
-      // Optionally handle error
-    }
-  };
+  // Optionally, update handleShare if you use it elsewhere
+  // const handleShare = async () => { ... }
 }
 
 const styles = StyleSheet.create({

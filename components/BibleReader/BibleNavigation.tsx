@@ -1,272 +1,230 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  Modal,
-  FlatList,
-  Dimensions
-} from 'react-native';
-import { useTheme } from '@/contexts/ThemeContext';
-import Colors from '@/constants/Colors';
-import Feather from '@expo/vector-icons/Feather';
-// Remove: import { ChevronDown, ChevronLeft, ChevronRight, X } from 'lucide-react-native';
-import { bibleBooks } from '@/constants/BibleData';
+import { View, Text, TouchableOpacity, Modal, FlatList, StyleSheet } from 'react-native';
+import { bibleBooks } from '../../constants/BibleData';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface BibleNavigationProps {
-  currentBook: string;
+  currentBook: number;
   currentChapter: number;
-  onChangeSelection: (book: string, chapter: number) => void;
+  currentVerse?: number;
+  onChangeSelection: (bookIndex: number, chapterIndex: number, verse: number | undefined) => void;
+  verseCount: number;
 }
 
-export default function BibleNavigation({ 
-  currentBook, 
-  currentChapter, 
-  onChangeSelection 
-}: BibleNavigationProps) {
+const BibleNavigation: React.FC<BibleNavigationProps> = ({
+  currentBook,
+  currentChapter,
+  currentVerse,
+  onChangeSelection,
+  verseCount,
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedBook, setSelectedBook] = useState(currentBook);
+  const [step, setStep] = useState<'book' | 'chapter' | 'verse'>('book');
+  const [selectedBookIndex, setSelectedBookIndex] = useState<number | null>(null);
+  const [selectedChapter, setSelectedChapter] = useState<number | null>(null);
   const { theme } = useTheme();
-  
-  const bookIndex = bibleBooks.findIndex(book => book.name === currentBook);
-  const chapterCount = bibleBooks[bookIndex]?.chapters || 1;
-  
-  const goToPreviousChapter = () => {
-    if (currentChapter > 1) {
-      onChangeSelection(currentBook, currentChapter - 1);
-    } else if (bookIndex > 0) {
-      const prevBook = bibleBooks[bookIndex - 1];
-      onChangeSelection(prevBook.name, prevBook.chapters);
-    }
-  };
-  
-  const goToNextChapter = () => {
-    if (currentChapter < chapterCount) {
-      onChangeSelection(currentBook, currentChapter + 1);
-    } else if (bookIndex < bibleBooks.length - 1) {
-      const nextBook = bibleBooks[bookIndex + 1];
-      onChangeSelection(nextBook.name, 1);
-    }
-  };
-  
-  const openSelectionModal = () => {
+
+  const openModal = () => {
+    setStep('book');
+    setSelectedBookIndex(null);
+    setSelectedChapter(null);
     setModalVisible(true);
   };
-  
-  const selectBook = (book: string) => {
-    setSelectedBook(book);
-  };
-  
-  const confirmSelection = (book: string, chapter: number) => {
-    onChangeSelection(book, chapter);
+
+  const closeModal = () => {
     setModalVisible(false);
   };
-  
-  // Generate array of chapter numbers for the selected book
-  const getChapters = () => {
-    const book = bibleBooks.find(b => b.name === selectedBook);
-    return Array.from({ length: book?.chapters || 1 }, (_, i) => i + 1);
+
+  const handleBookSelect = (index: number) => {
+    setSelectedBookIndex(index);
+    setStep('chapter');
   };
-  
+
+  const handleChapterSelect = (index: number) => {
+    setSelectedChapter(index);
+    setStep('verse');
+  };
+
+  const handleVerseSelect = (verse: number) => {
+    if (selectedBookIndex !== null && selectedChapter !== null) {
+      onChangeSelection(selectedBookIndex, selectedChapter, verse);
+      closeModal();
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentChapter > 0) {
+      onChangeSelection(currentBook, currentChapter - 1, undefined);
+    }
+  };
+
+  const handleNext = () => {
+    const chaptersInBook = bibleBooks[currentBook].chapters;
+    if (currentChapter < chaptersInBook - 1) {
+      onChangeSelection(currentBook, currentChapter + 1, undefined);
+    }
+  };
+
+  // Theme-based colors
+  const colors = {
+    background: theme === 'dark' ? '#222' : '#fff',
+    overlay: 'rgba(0,0,0,0.7)',
+    itemBg: theme === 'dark' ? '#333' : '#f0f0f0',
+    itemText: theme === 'dark' ? '#fff' : '#222',
+    closeBtn: theme === 'dark' ? '#444' : '#e0e0e0',
+    closeText: theme === 'dark' ? '#fff' : '#222',
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity 
-        style={[styles.navButton, styles.previousButton]} 
-        onPress={goToPreviousChapter}
-      >
-        <Feather name="chevron-left" size={22} color={Colors[theme].text} />
+      <TouchableOpacity style={styles.navButton} onPress={handlePrev}>
+        <Text style={styles.arrow}>{'<'}</Text>
       </TouchableOpacity>
-      
-      <TouchableOpacity 
-        style={[
-          styles.selectionButton, 
-          { backgroundColor: Colors[theme].card }
-        ]} 
-        onPress={openSelectionModal}
-      >
-        <Text style={[styles.selectionText, { color: Colors[theme].text }]}> {currentBook} {currentChapter} </Text>
-        <Feather name="chevron-down" size={18} color={Colors[theme].text} />
+      <TouchableOpacity style={styles.centerButton} onPress={openModal}>
+        <Text style={styles.centerText}>
+          {bibleBooks[currentBook].name} {currentChapter + 1}
+          {typeof currentVerse === 'number' ? `:${currentVerse}` : ''}
+        </Text>
       </TouchableOpacity>
-      
-      <TouchableOpacity 
-        style={[styles.navButton, styles.nextButton]} 
-        onPress={goToNextChapter}
-      >
-        <Feather name="chevron-right" size={22} color={Colors[theme].text} />
+      <TouchableOpacity style={styles.navButton} onPress={handleNext}>
+        <Text style={styles.arrow}>{'>'}</Text>
       </TouchableOpacity>
-      
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[
-            styles.modalContainer, 
-            { backgroundColor: Colors[theme].background }
-          ]}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: Colors[theme].text }]}>
-                Select Book & Chapter
-              </Text>
-              <TouchableOpacity 
-                style={styles.closeButton} 
-                onPress={() => setModalVisible(false)}
-              >
-                <Feather name="x" size={24} color={Colors[theme].text} />
-              </TouchableOpacity>
-            </View>
-            
-            <View style={styles.selectionContent}>
-              <View style={[
-                styles.booksContainer, 
-                { borderColor: Colors[theme].border }
-              ]}>
-                <FlatList
-                  data={bibleBooks}
-                  keyExtractor={(item) => item.name}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity 
-                      style={[
-                        styles.bookItem, 
-                        selectedBook === item.name && {
-                          backgroundColor: Colors[theme].tint,
-                        }
-                      ]} 
-                      onPress={() => selectBook(item.name)}
-                    >
-                      <Text style={[
-                        styles.bookName, 
-                        { color: selectedBook === item.name ? '#fff' : Colors[theme].text }
-                      ]}>
-                        {item.name}
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                  showsVerticalScrollIndicator={false}
-                />
-              </View>
-              
-              <View style={styles.chaptersContainer}>
-                <FlatList
-                  data={getChapters()}
-                  keyExtractor={(item) => item.toString()}
-                  numColumns={5}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity 
-                      style={[
-                        styles.chapterItem, 
-                        { borderColor: Colors[theme].border }
-                      ]} 
-                      onPress={() => confirmSelection(selectedBook, item)}
-                    >
-                      <Text style={[styles.chapterNumber, { color: Colors[theme].text }]}>
-                        {item}
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                  showsVerticalScrollIndicator={false}
-                />
-              </View>
-            </View>
+
+      <Modal visible={modalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}> 
+          <View style={[styles.modalContent, { backgroundColor: colors.background }]}> 
+            {step === 'book' && (
+              <FlatList
+                data={bibleBooks}
+                keyExtractor={(_, idx) => idx.toString()}
+                numColumns={2}
+                renderItem={({ item, index }) => (
+                  <TouchableOpacity
+                    style={[styles.chapterItem, { backgroundColor: colors.itemBg, flex: 1, margin: 6 }]}
+                    onPress={() => handleBookSelect(index)}
+                  >
+                    <Text style={[styles.chapterNumber, { color: colors.itemText }]}>{item.name}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+            {step === 'chapter' && selectedBookIndex !== null && (
+              <FlatList
+                data={Array.from({ length: bibleBooks[selectedBookIndex].chapters }, (_, i) => i + 1)}
+                keyExtractor={(_, idx) => idx.toString()}
+                numColumns={2}
+                renderItem={({ item, index }) => (
+                  <TouchableOpacity
+                    style={[styles.chapterItem, { backgroundColor: colors.itemBg, flex: 1, margin: 6 }]}
+                    onPress={() => handleChapterSelect(index)}
+                  >
+                    <Text style={[styles.chapterNumber, { color: colors.itemText }]}>Ch {item}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+            {step === 'verse' && selectedBookIndex !== null && selectedChapter !== null && (
+              <FlatList
+                data={Array.from({ length: verseCount }, (_, i) => i + 1)}
+                keyExtractor={(_, idx) => idx.toString()}
+                numColumns={2}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={[styles.verseNumber, { backgroundColor: colors.itemBg, flex: 1, margin: 6 }]}
+                    onPress={() => handleVerseSelect(item)}
+                  >
+                    <Text style={{ color: colors.itemText }}>{item}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+            <TouchableOpacity style={[styles.closeButton, { backgroundColor: colors.closeBtn }]} onPress={closeModal}>
+              <Text style={{ color: colors.closeText }}>Close</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
     </View>
   );
-}
-
-const { width } = Dimensions.get('window');
+};
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    padding: 10,
   },
   navButton: {
-    padding: 8,
-    borderRadius: 8,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#e0e0e0',
   },
-  previousButton: {
-    marginRight: 10,
+  arrow: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
-  nextButton: {
-    marginLeft: 10,
-  },
-  selectionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
+  centerButton: {
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
+    padding: 10,
+    marginHorizontal: 10,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 5,
   },
-  selectionText: {
-    fontFamily: 'Inter-SemiBold',
+  centerText: {
     fontSize: 16,
-    marginRight: 5,
+    fontWeight: 'bold',
   },
   modalOverlay: {
     flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalContainer: {
-    height: '80%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingTop: 20,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-  modalTitle: {
-    fontFamily: 'Inter-SemiBold',
-    fontSize: 20,
-  },
-  closeButton: {
-    padding: 5,
-  },
-  selectionContent: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  booksContainer: {
-    flex: 1,
-    borderRightWidth: 1,
-    paddingVertical: 10,
-  },
-  bookItem: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-  },
-  bookName: {
-    fontFamily: 'Inter-Regular',
-    fontSize: 16,
-  },
-  chaptersContainer: {
-    flex: 1,
-    padding: 15,
-  },
-  chapterItem: {
-    width: (width * 0.4) / 5,
-    height: (width * 0.4) / 5,
-    borderRadius: 8,
-    borderWidth: 1,
-    margin: 5,
+    backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  modalContent: {
+    width: '90%',
+    maxHeight: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+  },
+  chapterItem: {
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#f0f0f0',
+    marginVertical: 4,
+    alignItems: 'center',
+  },
   chapterNumber: {
-    fontFamily: 'Inter-Regular',
+    fontWeight: 'bold',
     fontSize: 16,
   },
+  versesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  verseNumber: {
+    padding: 8,
+    margin: 4,
+    borderRadius: 4,
+    backgroundColor: '#e8e8e8',
+    minWidth: 32,
+    alignItems: 'center',
+  },
+  closeButton: {
+    marginTop: 20,
+    alignSelf: 'center',
+    padding: 10,
+    backgroundColor: '#d9534f',
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });
+
+export default BibleNavigation;
