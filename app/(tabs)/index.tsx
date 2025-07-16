@@ -14,6 +14,8 @@ import VerseItem from '@/components/BibleReader/VerseItem';
 import { bibleBooks } from '@/constants/BibleData';
 
 export default function ReadScreen() {
+  const verseRefs = useRef<any[]>([]);
+  const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
   const [bookIndex, setBookIndex] = useState(0); // 0 = Genesis
   const [chapter, setChapter] = useState(1);
   const { theme } = useTheme();
@@ -79,8 +81,19 @@ export default function ReadScreen() {
           verseCount={bibleContent?.verses.length || 1}
           onChangeSelection={(b, c, v) => {
             setBookIndex(b);
-            setChapter(c + 1); // Convert back to 1-based
-            // handle verse selection (e.g., scroll to verse)
+            setChapter(c + 1);
+            // Always scroll to verse 1 when changing chapter
+            setSelectedVerse(1);
+            setTimeout(() => {
+              const ref = verseRefs.current[1];
+              if (ref && ref.measure) {
+                ref.measure((fx: number, fy: number, width: number, height: number, px: number, py: number) => {
+                  scrollViewRef.current?.scrollTo({ y: py - 80, animated: true });
+                });
+              } else {
+                scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+              }
+            }, 300);
           }}
         />
       </View>
@@ -96,6 +109,7 @@ export default function ReadScreen() {
           {bibleContent?.verses?.map((verse) => (
             <Animated.View 
               key={`${book}-${chapter}-${verse.number}`}
+              ref={el => { verseRefs.current[verse.number] = el; }}
               entering={FadeIn.delay(verse.number * 20)}
             >
               <VerseItem 
@@ -104,6 +118,7 @@ export default function ReadScreen() {
                 chapter={chapter}
                 isBookmarked={isBookmarked(book, chapter, verse.number)}
                 onBookmark={() => addBookmark(book, chapter, verse.number, verse.text)}
+                isHighlighted={selectedVerse === verse.number}
               />
             </Animated.View>
           ))}
@@ -178,3 +193,4 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
 });
+

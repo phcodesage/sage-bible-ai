@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Feather } from '@expo/vector-icons';
 import { useBookmarks } from '@/contexts/BookmarksContext';
 import { View, Text, StyleSheet } from 'react-native';
@@ -12,7 +12,8 @@ const LAST_CLEARED_KEY = 'bookmarks_lastCleared';
 const BADGE_KEY = 'bookmarks_badge_count';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  // Replace useColorScheme with useTheme
+  const { theme } = useTheme();
   const { bookmarks } = useBookmarks();
   const navigationState = useNavigationState(state => state);
   const [lastCleared, setLastCleared] = useState<number>(0);
@@ -54,9 +55,10 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
+        tabBarActiveTintColor: Colors[theme].tint,
+        tabBarInactiveTintColor: Colors[theme].tabIconDefault,
         tabBarStyle: {
+          backgroundColor: Colors[theme].background,
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,

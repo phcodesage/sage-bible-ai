@@ -22,7 +22,7 @@ export default function BookmarkItem({ bookmark, onRemove, isEditing }: Bookmark
     router.replace({
       pathname: "/",
       params: {
-        book: bookmark.book,
+        book: bookmark.book, 
         chapter: bookmark.chapter,
         verse: bookmark.verse
       }

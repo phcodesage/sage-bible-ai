@@ -34,9 +34,10 @@ interface VerseProps {
   isBookmarked: boolean;
   onBookmark: () => void;
   onNavigateToVerse?: (verseId: string) => void;
+  isHighlighted?: boolean;
 }
 
-export default function VerseItem({ verse, book, chapter, isBookmarked, onBookmark, onNavigateToVerse }: VerseProps) {
+export default function VerseItem({ verse, book, chapter, isBookmarked, onBookmark, onNavigateToVerse, isHighlighted }: VerseProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const [noteEditorVisible, setNoteEditorVisible] = useState(false);
   const [highlightSelectorVisible, setHighlightSelectorVisible] = useState(false);

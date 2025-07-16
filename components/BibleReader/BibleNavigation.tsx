@@ -73,69 +73,80 @@ const BibleNavigation: React.FC<BibleNavigationProps> = ({
     itemText: theme === 'dark' ? '#fff' : '#222',
     closeBtn: theme === 'dark' ? '#444' : '#e0e0e0',
     closeText: theme === 'dark' ? '#fff' : '#222',
+    navButton: theme === 'dark' ? '#444' : '#e0e0e0',
+    centerButton: theme === 'dark' ? '#333' : '#f5f5f5',
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.navButton} onPress={handlePrev}>
-        <Text style={styles.arrow}>{'<'}</Text>
+      <TouchableOpacity style={[styles.navButton, { backgroundColor: colors.navButton }]} onPress={handlePrev}>
+        <Text style={[styles.arrow, { color: colors.itemText }]}>{'<'}</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.centerButton} onPress={openModal}>
-        <Text style={styles.centerText}>
+      <TouchableOpacity style={[styles.centerButton, { backgroundColor: colors.centerButton }]} onPress={openModal}>
+        <Text style={[styles.centerText, { color: colors.itemText }]}>
           {bibleBooks[currentBook].name} {currentChapter + 1}
           {typeof currentVerse === 'number' ? `:${currentVerse}` : ''}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navButton} onPress={handleNext}>
-        <Text style={styles.arrow}>{'>'}</Text>
+      <TouchableOpacity style={[styles.navButton, { backgroundColor: colors.navButton }]} onPress={handleNext}>
+        <Text style={[styles.arrow, { color: colors.itemText }]}>{'>'}</Text>
       </TouchableOpacity>
 
       <Modal visible={modalVisible} animationType="slide" transparent>
         <View style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}> 
           <View style={[styles.modalContent, { backgroundColor: colors.background }]}> 
             {step === 'book' && (
-              <FlatList
-                data={bibleBooks}
-                keyExtractor={(_, idx) => idx.toString()}
-                numColumns={2}
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    style={[styles.chapterItem, { backgroundColor: colors.itemBg, flex: 1, margin: 6 }]}
-                    onPress={() => handleBookSelect(index)}
-                  >
-                    <Text style={[styles.chapterNumber, { color: colors.itemText }]}>{item.name}</Text>
-                  </TouchableOpacity>
-                )}
-              />
+              <>
+                <Text style={{ color: colors.itemText, fontWeight: 'bold', fontSize: 18, marginBottom: 10 }}>Book</Text>
+                <FlatList
+                  data={bibleBooks}
+                  keyExtractor={(_, idx) => idx.toString()}
+                  numColumns={2}
+                  renderItem={({ item, index }) => (
+                    <TouchableOpacity
+                      style={[styles.chapterItem, { backgroundColor: colors.itemBg, flex: 1, margin: 6 }]}
+                      onPress={() => handleBookSelect(index)}
+                    >
+                      <Text style={[styles.chapterNumber, { color: colors.itemText }]}>{item.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                />
+              </>
             )}
             {step === 'chapter' && selectedBookIndex !== null && (
-              <FlatList
-                data={Array.from({ length: bibleBooks[selectedBookIndex].chapters }, (_, i) => i + 1)}
-                keyExtractor={(_, idx) => idx.toString()}
-                numColumns={2}
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    style={[styles.chapterItem, { backgroundColor: colors.itemBg, flex: 1, margin: 6 }]}
-                    onPress={() => handleChapterSelect(index)}
-                  >
-                    <Text style={[styles.chapterNumber, { color: colors.itemText }]}>Ch {item}</Text>
-                  </TouchableOpacity>
-                )}
-              />
+              <>
+                <Text style={{ color: colors.itemText, fontWeight: 'bold', fontSize: 18, marginBottom: 10 }}>Chapter</Text>
+                <FlatList
+                  data={Array.from({ length: bibleBooks[selectedBookIndex].chapters }, (_, i) => i + 1)}
+                  keyExtractor={(_, idx) => idx.toString()}
+                  numColumns={2}
+                  renderItem={({ item, index }) => (
+                    <TouchableOpacity
+                      style={[styles.chapterItem, { backgroundColor: colors.itemBg, flex: 1, margin: 6 }]}
+                      onPress={() => handleChapterSelect(index)}
+                    >
+                      <Text style={[styles.chapterNumber, { color: colors.itemText }]}>Ch {item}</Text>
+                    </TouchableOpacity>
+                  )}
+                />
+              </>
             )}
             {step === 'verse' && selectedBookIndex !== null && selectedChapter !== null && (
-              <FlatList
-                data={Array.from({ length: verseCount }, (_, i) => i + 1)}
-                keyExtractor={(_, idx) => idx.toString()}
-                numColumns={2}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={[styles.verseNumber, { backgroundColor: colors.itemBg, flex: 1, margin: 6 }]}
-                    onPress={() => handleVerseSelect(item)}
-                  >
-                    <Text style={{ color: colors.itemText }}>{item}</Text>
-                  </TouchableOpacity>
-                )}
-              />
+              <>
+                <Text style={{ color: colors.itemText, fontWeight: 'bold', fontSize: 18, marginBottom: 10 }}>Verse</Text>
+                <FlatList
+                  data={Array.from({ length: verseCount }, (_, i) => i + 1)}
+                  keyExtractor={(_, idx) => idx.toString()}
+                  numColumns={2}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      style={[styles.verseNumber, { backgroundColor: colors.itemBg, flex: 1, margin: 6 }]}
+                      onPress={() => handleVerseSelect(item)}
+                    >
+                      <Text style={{ color: colors.itemText }}>{item}</Text>
+                    </TouchableOpacity>
+                  )}
+                />
+              </>
             )}
             <TouchableOpacity style={[styles.closeButton, { backgroundColor: colors.closeBtn }]} onPress={closeModal}>
               <Text style={{ color: colors.closeText }}>Close</Text>
